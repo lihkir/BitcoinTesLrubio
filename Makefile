@@ -3,7 +3,7 @@ CXXFLAGS=-DNDEBUG -O3 -Wall -Wno-unused-variable -lm -std=c++11
 LDFLAGS=
 LIBS= -L/usr/local/atlas/lib -llapack -lf77blas -latlas -lgfortran -lm
 
-OBJS_CODE=test_cases.o average.o bc.o fn_flux.o matmult.o hornerm.o extern.o
+OBJS_CODE=test_cases.o average.o bc.o fn_flux.o matmult.o hornerm.o extern.o lminmax_charspeed.o 
 
 pvm:  main_pvm_sed.o $(OBJS_CODE)
 	$(CXX) $(LDFLAGS) -o $@ $^

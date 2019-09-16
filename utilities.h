@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <iomanip>
 #include "test_cases.h"
 
 template <class T> T max(T a, T b)
@@ -13,6 +14,7 @@ template <class T> T max(T a, T b)
 template <class T> void PrintingContainer(const std::vector<T> &v)
 {
     std::cout << std::fixed;
+	std::cout << std::setprecision(16);
 	for (unsigned int i = 0; i < v.size(); i++) std::cout << v[i] << "\t";
 	std::cout << "\n\n";
 }
@@ -20,6 +22,7 @@ template <class T> void PrintingContainer(const std::vector<T> &v)
 template <class T> void PrintingContainer(const std::vector<std::vector<T>> &m)
 {
 	std::cout << std::fixed;
+	std::cout << std::setprecision(16);
 	for (unsigned int i = 0; i < m.size(); i++)
 	{
 		for (unsigned int j = 0; j < m[i].size(); j++)
@@ -47,7 +50,7 @@ template <class T> std::vector<T> RandomVector(int length, int nmax)
 template <class T> std::vector<std::vector<T>> RandomMatrix(int M_rows, int N_cols, int nmax)
 {
 	struct test_cases *pt_test = get_tests();
-	
+
 	std::vector<std::vector<T>> m(M_rows, std::vector<double>(N_cols + 2 * pt_test->gc));
 	int N_int = m[0].size() - 2 * pt_test->gc;
 
@@ -72,6 +75,11 @@ template <class T> T DotProduct(const std::vector<T> &u, const std::vector<T> &v
 	for (unsigned int i = 0; i < u.size(); i++)
 		s += u[i]*v[i];
 	return s;
+}
+
+template <typename T, typename U> auto max(T x, U y) -> decltype(x > y ? x : y)
+{
+  return x > y ? x : y;
 }
 
 #endif

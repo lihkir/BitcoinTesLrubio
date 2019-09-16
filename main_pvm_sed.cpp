@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <vector>
+#include <pthread.h>
 #include "sed_hsf.h"
 #include "sed_hsf_der.h"
 #include "average.h"
@@ -12,7 +13,7 @@
 #include "matmult.h"
 #include "hornerm.h"
 #include "test_cases.h"
-#include <pthread.h>
+#include "lminmax_charspeed.h"
 
 using namespace std;
 
@@ -121,6 +122,11 @@ int main(int argc, char* argv[])
   PrintingContainer(p);
 
   printf("#######################################################################\n\n");
+  printf("testing lminmax_charspeed.cpp function\n\n");
+
+  std::vector<double> S = lminmax_charspeed(ul, ur);
+
+  PrintingContainer(S);
 
   return 0;
 }
