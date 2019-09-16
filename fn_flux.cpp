@@ -1,7 +1,6 @@
 #include "fn_flux.h"
 #include "sed_hsf.h"
 #include "utilities.h"
-#include <stdio.h>
 
 std::vector<double> fn_flux(std::vector<double> phi, std::vector<double> beta)
 {

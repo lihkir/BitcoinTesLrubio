@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <vector>
-#include "globals.h"
+#include "test_cases.h"
 
 template <class T> T max(T a, T b)
 {
@@ -46,15 +46,32 @@ template <class T> std::vector<T> RandomVector(int length, int nmax)
 
 template <class T> std::vector<std::vector<T>> RandomMatrix(int M_rows, int N_cols, int nmax)
 {
-	global_data *pt_data;
-	std::vector<std::vector<T>> m(M_rows, std::vector<double>(N_cols + 2 * pt_data->gc));
-	int N_int = m[0].size() - 2 * pt_data->gc;
+	struct test_cases *pt_test = get_tests();
+	
+	std::vector<std::vector<T>> m(M_rows, std::vector<double>(N_cols + 2 * pt_test->gc));
+	int N_int = m[0].size() - 2 * pt_test->gc;
 
 	for (int i = 0; i < M_rows; i++)
-		for (int j = pt_data->gc; j < N_int + pt_data->gc; j++)
+		for (int j = pt_test->gc; j < N_int + pt_test->gc; j++)
 			m[i][j] = T(rand() % nmax) + 1;
 
 	return m;
+}
+
+template <class T> std::vector<T> Row(const std::vector<std::vector<T>> &m, int j)
+{
+	std::vector<T> c(m.size());
+	for (unsigned int i = 0; i < c.size(); i++)
+		c[i] = m[i][j];
+	return c;
+}
+
+template <class T> T DotProduct(const std::vector<T> &u, const std::vector<T> &v)
+{
+	T s{};
+	for (unsigned int i = 0; i < u.size(); i++)
+		s += u[i]*v[i];
+	return s;
 }
 
 #endif

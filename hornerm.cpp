@@ -1,12 +1,8 @@
 #include "hornerm.h"
-#include "globals.h"
 #include "matmult.h"
-#include "stdio.h"
 
 void hornerm(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &x, std::vector<double> &a, std::vector<std::vector<double>> &p, std::vector<std::vector<double>> &pAx)
 {
-	global_data* pt_data;
-
 	for (unsigned int i = 0; i < pAx.size(); i++)
 		for (unsigned int j = 0; j < pAx[i].size(); j++)
 			pAx[i][j] = a[a.size()-1]*x[i][j];
