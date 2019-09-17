@@ -49,7 +49,7 @@ std::vector<double> lminmax_charspeed(std::vector<double> &phil, std::vector<dou
         }
     }
 
-    auto min_n = *min_element(begin(buf_opt), end(buf_opt));    
+    auto min_n = *min_element(begin(buf_opt), end(buf_opt));
     S.push_back(min_n);
     S.push_back(max_0);
 

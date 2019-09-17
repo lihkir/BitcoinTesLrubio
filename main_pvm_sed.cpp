@@ -14,6 +14,7 @@
 #include "hornerm.h"
 #include "test_cases.h"
 #include "lminmax_charspeed.h"
+#include "minmax_charspeed.h"
 
 using namespace std;
 
@@ -61,6 +62,7 @@ int main(int argc, char* argv[])
   std::vector<std::vector<double>> x   = RandomMatrix<double>(pt_test->M_rows, N_cols, 9);
   std::vector<std::vector<double>> pAx = RandomMatrix<double>(pt_test->M_rows, N_cols, 9);
   std::vector<std::vector<double>> pr  = RandomMatrix<double>(pt_test->M_rows, N_cols, 9);
+  std::vector<std::vector<double>> Sl  = RandomMatrix<double>(2, N_cols, 9);
 
   printf("\nm, z, p matrices before ghost:\n\n");
   PrintingContainer(m);
@@ -69,6 +71,7 @@ int main(int argc, char* argv[])
   bc(m);
   bc(z);
   bc(p);
+  bc(Sl);
   printf("\nm, z, p matrices after ghost:\n\n");
   PrintingContainer(m);
   PrintingContainer(z);
@@ -125,8 +128,13 @@ int main(int argc, char* argv[])
   printf("testing lminmax_charspeed.cpp function\n\n");
 
   std::vector<double> S = lminmax_charspeed(ul, ur);
-
   PrintingContainer(S);
 
+  printf("#######################################################################\n\n");
+
+  minmax_charspeed(m, Sl);
+
+  printf("#######################################################################\n\n");
+  
   return 0;
 }
