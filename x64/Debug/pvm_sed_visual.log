@@ -1,0 +1,8 @@
+﻿  pvm_sed_visual.cpp
+D:\MEGA\Research\gitcodes\pvm_sed_visual\utilities.h(55,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\MEGA\Research\gitcodes\pvm_sed_visual\pvm_sed_visual.cpp(73): message : see reference to function template instantiation 'std::vector<std::vector<double,std::allocator<_Ty>>,std::allocator<std::vector<_Ty,std::allocator<_Ty>>>> RandomMatrix<double>(int,int,double)' being compiled
+D:\MEGA\Research\gitcodes\pvm_sed_visual\pvm_sed_visual.cpp(73): message :         with
+D:\MEGA\Research\gitcodes\pvm_sed_visual\pvm_sed_visual.cpp(73): message :         [
+D:\MEGA\Research\gitcodes\pvm_sed_visual\pvm_sed_visual.cpp(73): message :             _Ty=double
+D:\MEGA\Research\gitcodes\pvm_sed_visual\pvm_sed_visual.cpp(73): message :         ]
+  pvm_sed_visual.vcxproj -> D:\MEGA\Research\gitcodes\pvm_sed_visual\x64\Debug\pvm_sed_visual.exe
