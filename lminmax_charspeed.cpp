@@ -9,12 +9,12 @@
 std::vector<double> lminmax_charspeed(std::vector<double>& phil, std::vector<double>& phir)
 {
 	struct test_cases* pt_test = get_tests();
-	int N = pt_test->delta.size();
+	auto N = pt_test->delta.size();
 
 	std::vector<double> S;
 	double s_phil = 0, s_phir = 0, etal = 0, etar = 0;
 
-	for (int j = 0; j < N; j++)
+	for (auto j = 0; j < N; j++)
 	{
 		s_phil += phil[j];
 		etal += pt_test->delta[j] * phil[j];

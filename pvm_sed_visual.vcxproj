@@ -91,6 +91,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,11 +152,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="apply_diffus.cpp" />
     <ClCompile Include="average.cpp" />
     <ClCompile Include="bc.cpp" />
     <ClCompile Include="charspeed.cpp" />
     <ClCompile Include="der_diffusion_tensor.cpp" />
+    <ClCompile Include="diffus.cpp" />
     <ClCompile Include="diffusion_tensor.cpp" />
+    <ClCompile Include="diffus_charspeed.cpp" />
     <ClCompile Include="fn_flux.cpp" />
     <ClCompile Include="global.cpp" />
     <ClCompile Include="hornerm.cpp" />
@@ -169,11 +173,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="apply_diffus.h" />
     <ClInclude Include="average.h" />
     <ClInclude Include="bc.h" />
     <ClInclude Include="charspeed.h" />
     <ClInclude Include="der_diffusion_tensor.h" />
+    <ClInclude Include="diffus.h" />
     <ClInclude Include="diffusion_tensor.h" />
+    <ClInclude Include="diffus_charspeed.h" />
     <ClInclude Include="fn_flux.h" />
     <ClInclude Include="hornerm.h" />
     <ClInclude Include="lminmax_charspeed.h" />

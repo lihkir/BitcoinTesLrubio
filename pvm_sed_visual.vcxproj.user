@@ -4,4 +4,8 @@
     <LocalDebuggerCommandArguments>4 1 1e-7</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArguments>4 1 1e-7</LocalDebuggerCommandArguments>
+  </PropertyGroup>
 </Project>

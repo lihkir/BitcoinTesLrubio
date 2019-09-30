@@ -9,18 +9,18 @@ struct test_cases* get_tests();
 struct test_cases
 {
 	std::vector<double> delta;
-	int M_rows;
-	int gc;
-	double phimax;
-	int int_form;
-	int gc_id;
-	double g;
-	double mu_c;
-	double rho_d;
-	double rho_c;
-	double vinf;
-	double L;
-	double nexp;
+	int M_rows = NULL;
+	int gc = NULL;
+	double phimax = NULL;
+	int int_form = NULL;
+	int gc_id = NULL;
+	double g = NULL;
+	double mu_c = NULL;
+	double rho_d = NULL;
+	double rho_c = NULL;
+	double vinf = NULL;
+	double L = NULL;
+	double nexp = NULL;
 };
 
 #endif

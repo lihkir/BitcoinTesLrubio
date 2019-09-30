@@ -54,6 +54,15 @@
     <ClCompile Include="charspeed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="apply_diffus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="diffus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="diffus_charspeed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -99,6 +108,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="charspeed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="apply_diffus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="diffus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="diffus_charspeed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

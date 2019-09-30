@@ -1,2 +1,15 @@
-﻿  pvm_sed_visual.cpp
+﻿  average.cpp
+  bc.cpp
+  charspeed.cpp
+  der_diffusion_tensor.cpp
+  diffusion_tensor.cpp
+  fn_flux.cpp
+  global.cpp
+  hornerm.cpp
+  lminmax_charspeed.cpp
+  matmult.cpp
+  minmax_charspeed.cpp
+  pvm_sed_visual.cpp
+  test_cases.cpp
+  Generating Code...
   pvm_sed_visual.vcxproj -> D:\MEGA\Research\gitcodes\pvm_sed_visual\Debug\pvm_sed_visual.exe

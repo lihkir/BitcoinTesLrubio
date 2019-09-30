@@ -4,9 +4,10 @@
 void bc(std::vector<std::vector<double>>& u)
 {
 	struct test_cases* pt_test = get_tests();
-	int N = u[0].size() - 2 * pt_test->gc;
+	
+	auto N = (int)u[0].size() - 2 * pt_test->gc;
 
-	for (unsigned int i = 0; i < u.size(); i++)
+	for (auto i = 0; i < u.size(); i++)
 	{
 		for (auto j = 0; j != pt_test->gc; j++)
 		{

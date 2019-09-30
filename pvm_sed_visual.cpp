@@ -19,6 +19,9 @@
 #include "diffusion_tensor.h"
 #include "der_diffusion_tensor.h"
 #include "charspeed.h"
+#include "apply_diffus.h"
+#include "diffus.h"
+#include "diffus_charspeed.h"
 
 using namespace std;
 
@@ -163,6 +166,23 @@ int main(int argc, char* argv[])
 
 	double chrs = charspeed(m);
 	printf("charspeed = %0.16f\n\n", chrs);
+
+	printf("#######################################################################\n\n");
+	printf("testing apply_diffus.cpp function\n\n");
+
+	std::vector<std::vector<double>> K = apply_diffus(m, z, 0.5);
+	PrintingContainer(K, 32);
+
+	printf("#######################################################################\n\n");
+	printf("testing diffus.cpp function\n\n");
+
+	std::vector<std::vector<double>> Kd = diffus(m,0.5);
+	PrintingContainer(Kd, 32);
+
+	printf("#######################################################################\n\n");
+	printf("testing diffus_charspeed.cpp function\n\n");
+
+	printf("diffus_charspeed(m) = %0.16f\n\n", diffus_charspeed(m));
 
 	printf("#######################################################################\n\n");
 
