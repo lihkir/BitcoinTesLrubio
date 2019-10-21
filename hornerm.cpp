@@ -1,29 +1,31 @@
+#include <stdio.h>
 #include "hornerm.h"
 #include "matmult.h"
+#include "utilities.h"
 
-void hornerm(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &x, std::vector<double> &a, std::vector<std::vector<double>> &p, std::vector<std::vector<double>> &pAx)
+void hornerm(std::vector<std::vector<double>>& A, std::vector<std::vector<double>>& dif, std::vector<double>& Qc, std::vector<std::vector<double>>& fh, std::vector<std::vector<double>>& Qurmul)
 {
-	for (unsigned int i = 0; i < pAx.size(); i++)
-		for (unsigned int j = 0; j < pAx[i].size(); j++)
-			pAx[i][j] = a[a.size()-1]*x[i][j];
-
-	for (unsigned int k = 0; k < x[0].size(); k++)
-    {
-		for (unsigned int j = a.size()-1; j-- > 0 ;)
+	for (unsigned int j = 0; j < dif[0].size(); j++)
+		for (unsigned int i = 0; i < dif.size(); i++)
+			Qurmul[i][j] = Qc[Qc.size() - 1] * dif[i][j];
+		
+	for (unsigned int k = 0; k < dif[0].size(); k++)
+	{
+		for (int j = Qc.size() - 2; j >= (0); j-=1)
 		{
-			if (a[j] != 0)
+			if (Qc[j] != 0)
 			{
-				for (unsigned int i = 0; i < x.size(); i++) 
-					p[i][k] = a[j] * x[i][k];				
+				for (unsigned int i = 0; i < dif.size(); i++)
+					fh[i][k] = Qc[j] * dif[i][k];
 			}
 			else
 			{
-				for (unsigned int i = 0; i < x.size(); i++ ) 
-					p[i][k] = 0;
+				for (unsigned int i = 0; i < dif.size(); i++)
+					fh[i][k] = 0;
 			}
-			matmult(A, pAx, p);
-			for (unsigned int i = 0; i < x.size(); i++ ) 
-				pAx[i][k] = p[i][k];
+			matmult(A, Qurmul, fh);
+			for (unsigned int i = 0; i < dif.size(); i++)
+				Qurmul[i][k] = fh[i][k];
 		}
 	}
 }

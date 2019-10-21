@@ -6,8 +6,8 @@
 
 inline double sed_hsf(double phi)
 {
-  struct test_cases *pt_test = get_tests();
-  return exp(-0.5 * pow(phi / pt_test->phimax, 2));
+	struct test_cases* pt_test = get_tests();
+	return exp(-0.5 * pow(phi / pt_test->phimax, 2));
 }
 
 #endif

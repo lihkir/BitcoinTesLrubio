@@ -3,6 +3,6 @@
 
 #include <vector>
 
-void hornerm(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &x, std::vector<double> &a, std::vector<std::vector<double>> &p, std::vector<std::vector<double>> &pAx);
+void hornerm(std::vector<std::vector<double>>& A, std::vector<std::vector<double>>& dif, std::vector<double>& Qc, std::vector<std::vector<double>>& fh, std::vector<std::vector<double>>& Qurmul);
 
 #endif 

@@ -3,6 +3,6 @@
 
 #include <vector>
 
-std::vector<double> fn_flux(std::vector<double> phi, std::vector<double> beta);
+std::vector<double> fn_flux(std::vector<double> phi);
 
 #endif

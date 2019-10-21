@@ -3,6 +3,6 @@
 
 #include <vector>
 
-void matmult(std::vector<std::vector<double>> &A, std::vector<std::vector<double>> &x, std::vector<std::vector<double>> &p);
+void matmult(std::vector<std::vector<double>>& A, std::vector<std::vector<double>>& x, std::vector<std::vector<double>>& p);
 
 #endif 
