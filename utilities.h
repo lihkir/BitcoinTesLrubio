@@ -57,16 +57,14 @@ template <class T> std::vector<T> RandomVector(int length, double nmax)
 	return a;
 }
 
-template <class T> std::vector<std::vector<T>> RandomMatrix(int M_rows, int N_cols, double nmax)
+template <class T> std::vector<std::vector<T>> RandomMatrix(int M_rows, int N_cols, int gc, double nmax)
 {
-	struct test_cases* pt_test = get_tests();
-
-	int N_out = N_cols + 2 * pt_test->gc;
+	int N_out = N_cols + 2 * gc;
 	std::vector<std::vector<T>> m(M_rows, std::vector<double>(N_out));
-	int N_int = m[0].size() - 2 * pt_test->gc;
+	int N_int = m[0].size() - 2 * gc;
 
 	for (int i = 0; i < M_rows; i++)
-		for (int j = pt_test->gc; j < N_int + pt_test->gc; j++)
+		for (int j = gc; j < N_int + gc; j++)
 			m[i][j] = nmax * rand();
 
 	return m;
@@ -88,30 +86,42 @@ template <class T> T DotProduct(const std::vector<T>& u, const std::vector<T>& v
 	return s;
 }
 
+template <class T> T SquareSum(const std::vector<T>& u)
+{
+	T s{};
+	for (unsigned int i = 0; i < u.size(); i++)
+		s += u[i] * u[i];
+	return s;
+}
+
 template <typename T, typename U> auto max(T x, U y) -> decltype(x > y ? x : y)
 {
 	return x > y ? x : y;
 }
 
-template <class T> std::vector<std::vector<double>> SubMatrix(const std::vector<std::vector<T>>& m)
+template <class T> std::vector<std::vector<double>> SubMatrix(const std::vector<std::vector<T>>& m, int gc)
 {
-	struct test_cases* pt_test = get_tests();
-
-	int N_int = (int)m[0].size() - 2 * pt_test->gc;
+	int N_int = (int)m[0].size() - 2 * gc;
 	std::vector<std::vector<double>> R(m.size(), std::vector<double>(N_int));
 
 	for (unsigned int i = 0; i < R.size(); i++)
 		for (unsigned int j = 0; j < R[i].size(); j++)
-			R[i][j] = m[i][pt_test->gc + j];
+			R[i][j] = m[i][gc + j];
 
 	return R;
 }
 
 template <class T> std::vector<T> SubVector(const std::vector<std::vector<T>>& m, int col)
 {
-	struct test_cases* pt_test = get_tests();
 	std::vector<T> R(m.size());
 	for (unsigned int i = 0; i < R.size(); i++) R[i] = m[i][col];
+	return R;
+}
+
+template <class T> std::vector<std::vector<T>> SubCol(const std::vector<std::vector<T>>& m, int col)
+{
+	std::vector<std::vector<T>> R(m.size(), std::vector<T>(1));
+	for (unsigned int i = 0; i < R.size(); i++) R[i][0] = m[i][col];
 	return R;
 }
 

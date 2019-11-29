@@ -6,6 +6,6 @@
 
 namespace global { extern double D0; }
 
-std::map<int, std::vector<std::vector<double>>> der_diffusion_tensor(std::vector<std::vector<double>>& u);
+std::map<int, std::vector<std::vector<double>>> der_diffusion_tensor(std::vector<std::vector<double>>& u, int r);
 
 #endif

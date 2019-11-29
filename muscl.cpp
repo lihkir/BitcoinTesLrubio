@@ -8,7 +8,6 @@ void muscl(std::vector<std::vector<double>>& u, std::vector<std::vector<double>>
 {
 
 	struct test_cases* pt_test = get_tests();
-
 	int M = u[0].size() - 2 * pt_test->gc; int N = u.size();
 
 	double du;

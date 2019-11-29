@@ -51,7 +51,7 @@ void convec_pvm(std::vector<std::vector<double>>& v, double h, std::vector<std::
 
 	bc(v);
 	std::vector<std::vector<double>> S = minmax_charspeed(v);
-
+	
 	double cs = 0;
 	for (int i = pt_test->gc; i < M + pt_test->gc; i++)
 		cs = max(cs, max(fabs(S[0][i]), fabs(S[1][i])));

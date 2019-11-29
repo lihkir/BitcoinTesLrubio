@@ -1,3 +1,6 @@
+#include <fstream>
+#include <cmath>
+#include <string.h>
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
@@ -5,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <assert.h>
+#include <iomanip>
 #include "test_cases.h"
 #include "utilities.h"
 #include "sed_hsf.h"
@@ -27,213 +31,105 @@
 #include "jacobiana_dec.h"
 #include "weno5.h"
 #include "convec.h"
+#include "residual.h"
+#include "lsolve.h"
+#include "rkimex.h"
 
 using namespace std;
 
 namespace global
 { 
-	extern int idx_test;
-	extern int idx_q;
-	extern double D0;
-	extern int int_form;
+  extern int idx_test;
+  extern int idx_q;
+  extern double D0;
+  extern int int_form;
+  extern double beta;
+}
+
+std::vector<double> parse_times(char * str_times)
+{
+	char * p;
+	int commas=0;
+	for ( p=str_times; *p; p++ ) 
+		if ( *p == ',' ) commas++;
+
+	std::vector<double> Ta(commas+1);
+
+  	Ta[0] = atof(strtok(str_times, ","));
+	int count = 0;
+	while ((p = strtok(NULL, ",")))
+		Ta[++count] = atof(p);
+	
+	return Ta;  
 }
 
 int main(int argc, char* argv[])
 {
 	printf("\nStarting pvm_sed\n\n");
 	/** M_rows := number of species and N_cols := number of nodes **/
-  
-  	int N_cols = atoi(argv[1]);	
+	
+	int N_cols = atoi(argv[1]);	
   	global::idx_test = atoi(argv[2]);
   	global::D0 = atof(argv[3]);
   	global::idx_q = atoi(argv[4]);
   	global::int_form = atoi(argv[5]);
-	double cfl = atof(argv[6]);
-	int imex_type = atoi(argv[7]);
-	double T = atof(argv[8]);  
+  	double cfl = atof(argv[6]);
+  	int imex_type = atoi(argv[7]);
+	std::vector<double> Ta = parse_times(argv[8]);
+  	// double T = atof(argv[8]);
+	const char *outname= argv[9];
 
-  	srand(time(NULL));
-  	int Prec = 16;
+ 	struct test_cases* pt_test = get_tests();
   
-  	printf("\n#######################################################################\n");
-  	printf("\ntesting: beta_cases.cpp function\n\n");
+  	std::vector<std::vector<double>> u0(pt_test->M_rows, std::vector<double>(N_cols));
+  	global::beta = 1e-15;
+
+#include "init.h"
+
+	std::vector<std::vector<double>> A;
+  	std::vector<double> b;
+  	std::vector<std::vector<double>> Ah;
+  	std::vector<double> bh;
   
-  	struct test_cases* pt_test = get_tests();
-  	printf("D0 = %0.16f\t pt_test->nexp = %f\n\n", global::D0 , pt_test->nexp);
-  	PrintingContainer(pt_test->delta, Prec);
+	if (imex_type == 0) 
+    { /** NI **/
+		std::vector<double> Arow; Arow.push_back(0.5);
+      	A.push_back(Arow);
+      	b.push_back(1);
+      
+      	std::vector<double> Ahrow; Ahrow.push_back(0); Ahrow.push_back(0.5);
+      	Ah.push_back(std::vector<double>(2)); Ah.push_back(Ahrow);
+      	bh.push_back(0); bh.push_back(1);
+    }
+	else
+    {
+    	std::vector<double> Arow; Arow.push_back(0.5); Arow.push_back(0.5);
+      	A.push_back(std::vector<double>(2)); A.push_back(Arow);
+      	b.push_back(0.5); b.push_back(0.5);
+      
+      	std::vector<double> Ahrow; Ahrow.push_back(1); Ahrow.push_back(0);
+      	Ah.push_back(std::vector<double>(2)); Ah.push_back(Ahrow);
+      	bh.push_back(0.5); bh.push_back(0.5);
+    }
   
-	printf("#######################################################################\n\n");
-	
-	double sed_hsfd = sed_hsf(0.5);
- 	printf("testing: sed_hsfd = %0.16f\n\n", sed_hsfd);
+  	printf("b.size() = % ld:\nb = \n\n", b.size());
+  	PrintingContainer(b, 4);
+  	printf("Arows = % ld\tAcols = % ld:\nA = \n\n", A.size(), A[0].size());
+  	PrintingContainer(A, 4);
   
-  	double sed_hsfd_der = sed_hsf_der(1);
-  	printf("testing: sed_hsfd = %0.16f\n", sed_hsfd_der);
-  	printf("\n#######################################################################\n");
-  	printf("\ntesting: average.cpp function\n\n");
-  
-	std::vector<double> ul = RandomVector<double>(pt_test->M_rows, 1e-14);
-	std::vector<double> ur = RandomVector<double>(pt_test->M_rows, 1e-14);
-	std::vector<double> az = RandomVector<double>(pt_test->M_rows, 1e-14);
+  	printf("bh.size() = % ld:\nbh = \n\n", bh.size());
+  	PrintingContainer(bh, 4);
+  	printf("Ahrows = % ld\tAhcols = % ld:\nAh = \n\n", Ah.size(), Ah[0].size());
+  	PrintingContainer(Ah, 4);
 
-	PrintingContainer(ul, Prec);
-	PrintingContainer(ur, Prec);
-	std::vector<double> ua = average(ul, ur, 0.5);
-	PrintingContainer(ua, Prec);
-
-	printf("\n#######################################################################\n");
-	printf("\ntesting: bc.cpp function\n\n");
-
-	std::vector<std::vector<double>> m   = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> z   = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> p   = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> A	 = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> x   = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> pAx = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> pr  = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> Sl  = RandomMatrix<double>(2, N_cols, 1e-14);
-
-	printf("\nm, z, p matrices before ghost:\n\n");
-	PrintingContainer(m, Prec);
-	PrintingContainer(z, Prec);
-	PrintingContainer(p, Prec);
-	bc(m);
-	bc(z);
-	bc(p);
-	bc(Sl);
-	printf("\nm, z, p matrices after ghost:\n\n");
-	PrintingContainer(m, Prec);
-	PrintingContainer(z, Prec);
-	PrintingContainer(p, Prec);
-
-	printf("\n#######################################################################\n");
-
-	printf("testing fn_flux.cpp function\n\n");
-
-	std::vector<double> fn = fn_flux(ul);
-	int Prec32 = 32;
-	PrintingContainer(fn, Prec32);
-
-	printf("#######################################################################\n\n");
-	printf("\ntesting hornerm.cpp\n");
-
-	bc(A);
-	bc(x);
-	bc(pr);
-	bc(pAx);
-	printf("\naz, A, x, pr, pAx: before\n");
-	PrintingContainer(az, Prec);
-	PrintingContainer(A, Prec);
-	PrintingContainer(x, Prec);
-	PrintingContainer(pr, Prec);
-	PrintingContainer(pAx, Prec);
-	hornerm(A, x, az, pr, pAx);
-	printf("\naz, A, x, pr, pAx: later\n");
-	PrintingContainer(az, Prec);
-	PrintingContainer(A, Prec);
-	PrintingContainer(x, Prec);
-	PrintingContainer(pr, Prec32);
-	PrintingContainer(pAx, Prec32);
-
-	printf("#######################################################################\n\n");
-	printf("testing matmult.cpp function\n\n");
-
-	printf("\nm, z, p before:\n");
-	PrintingContainer(m, Prec);
-	PrintingContainer(z, Prec);
-	PrintingContainer(p, Prec);
-	matmult(m, z, p);
-	printf("\nm, z, p later:\n");
-	PrintingContainer(m, Prec);
-	PrintingContainer(z, Prec);
-	PrintingContainer(p, Prec);
-
-	printf("#######################################################################\n\n");
-	printf("testing lminmax_charspeed.cpp function\n\n");
-
-	std::vector<double> Sleft = lminmax_charspeed(ul, ur);
-	PrintingContainer(Sleft, Prec);
-
-	printf("#######################################################################\n\n");
-	printf("testing minmax_charspeed.cpp function\n\n");
-
-	std::vector<std::vector<double>> Sminmax = minmax_charspeed(m);
-	PrintingContainer(Sminmax, Prec);
-
-	printf("#######################################################################\n\n");
-	printf("testing diffusion_tensor.cpp function\n\n");
-
-	std::map<int, std::vector<std::vector<double>>> MapDiff = diffusion_tensor(m);
-	for (unsigned int i = 0; i < m.size(); i++) { PrintingContainer(MapDiff[i], Prec); }
-
-	printf("#######################################################################\n\n");
-	printf("testing der_diffusion_tensor.cpp function\n\n");
-
-	std::map<int, std::vector<std::vector<double>>> MapDerDiff = der_diffusion_tensor(m);
-	for (unsigned int i = 0; i < m.size(); i++) { PrintingContainer(MapDerDiff[i], Prec); }
-
-	printf("#######################################################################\n\n");
-	printf("testing charspeed.cpp function\n\n");
-
-	double chrs = charspeed(m);
-	printf("charspeed = %0.16f\n\n", chrs);
-
-	printf("#######################################################################\n\n");
-	printf("testing apply_diffus.cpp function\n\n");
-
-	std::vector<std::vector<double>> K = apply_diffus(m, z, 0.5);
-	PrintingContainer(K, 32);
-
-	printf("#######################################################################\n\n");
-	printf("testing diffus.cpp function\n\n");
-
-	std::vector<std::vector<double>> Kd = diffus(m,0.5);
-	PrintingContainer(Kd, 32);
-
-	printf("#######################################################################\n\n");
-	printf("testing diffus_charspeed.cpp function\n\n");
-
-	printf("diffus_charspeed(m) = %0.16f\n\n", diffus_charspeed(m));
-
-	printf("#######################################################################\n\n");
-	printf("testing diffusion_matrix.cpp function\n\n");
-
-	std::map<int, std::vector<std::vector<double>>> D;
-	std::map<int, std::vector<std::vector<double>>> L;
-	std::map<int, std::vector<std::vector<double>>> U;
-
-	diffusion_matrix(m, 0.5, 0.5, D, L, U);
-	for (unsigned int i = 0; i < m[0].size(); i++) { PrintingContainer(U[i], 16); }
-
-	printf("#######################################################################\n\n");
-	printf("testing jacobiana.cpp function\n\n");
-
-	std::vector<std::vector<double>> jac = jacobiana(ul);
-	PrintingContainer(jac, 20);
-
-	printf("#######################################################################\n\n");
-	printf("testing jacobiana_dec.cpp function\n\n");
-
-	std::vector<std::vector<double>> Jdec = jacobiana_dec(ul);
-	PrintingContainer(Jdec, 20);
-
-	printf("#######################################################################\n\n");
-	printf("\ntesting weno5.cpp function");
-
-	double w5 = weno5(ul, 1e-10);
-	printf("\n\nweno5(ul, 1e-10) = %0.16f\n\n", w5);
-
-	printf("#######################################################################\n\n");
-	printf("testing convec.cpp function\n");
-
-	std::vector<std::vector<double>> uh = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-	std::vector<std::vector<double>> Kh = RandomMatrix<double>(pt_test->M_rows, N_cols, 1e-14);
-
-	PrintingContainer(Kh, 16);
-	convec(uh, 0.5, Kh);
-	PrintingContainer(Kh, 16);
-
-	printf("#######################################################################\n\n");
+	printf("\nFunction: rkimex.cpp\n");
+	rkimex(A, b, Ah, bh, u0, Ta, cfl, pt_test->L, pt_test->convec_type, imex_type, global::idx_test);
+  	
+	ofstream fileout(outname);
+  	for (int i = 0; i < pt_test->M_rows; i++)
+    	for (int j = 0; j < N_cols; j++) 
+      		fileout << std::fixed << std::setprecision(16) << std::scientific << u0[i][j] << endl;
+  	fileout.close();
 
 	return 0;
 }

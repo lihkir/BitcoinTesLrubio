@@ -3,6 +3,6 @@
 
 #include <vector>
 
-std::vector<std::vector<double>> diffus(std::vector<std::vector<double>>& uh, double h);
+void diffus(std::vector<std::vector<double>>& uh, double h, std::vector<std::vector<double>> &K);
 
 #endif

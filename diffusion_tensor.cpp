@@ -20,7 +20,10 @@ std::map<int, std::vector<std::vector<double>>> diffusion_tensor(std::vector<std
 	{
 		double phit = VectorSum(Col(u, k));
 		if (phit > 1)
+		{	
+			printf("\nInside diffusion_tensor phit = %0.16f\n", phit);
 			throw std::invalid_argument("\nError: phit > 1 !!\n");
+		}
 
 		Bsol[k] = Bele;
 		for (auto i = 0; i < m; i++)

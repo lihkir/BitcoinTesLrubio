@@ -3,6 +3,6 @@
 
 #include <vector>
 
-std::vector<std::vector<double>> apply_diffus(std::vector<std::vector<double>>& ut, std::vector<std::vector<double>>& uh, double h);
+void apply_diffus(std::vector<std::vector<double>> &ut, std::vector<std::vector<double>> &uh, double h, std::vector<std::vector<double>> &K);
 
 #endif

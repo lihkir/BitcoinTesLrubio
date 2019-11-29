@@ -6,4 +6,5 @@ namespace global
 	double D0;
 	int idx_q;
 	int int_form;
+	double beta;
 }

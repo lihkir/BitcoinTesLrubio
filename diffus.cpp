@@ -5,15 +5,14 @@
 #include "test_cases.h"
 #include "utilities.h"
 
-std::vector<std::vector<double>> diffus(std::vector<std::vector<double>>& uh, double h)
+void diffus(std::vector<std::vector<double>>& uh, double h, std::vector<std::vector<double>> &K)
 {
 	struct test_cases* pt_test = get_tests();
 
 	int m = uh.size();
 	int n = uh[0].size() - 2 * pt_test->gc;
 
-	std::vector<std::vector<double>> K(m, std::vector<double>(n));
-	std::vector<std::vector<double>> u = SubMatrix(uh);
+	std::vector<std::vector<double>> u = SubMatrix(uh, pt_test->gc);
 	std::map<int, std::vector<std::vector<double>>> B = diffusion_tensor(u);
 
 	for (int p = 0; p < m; p++)
@@ -37,5 +36,4 @@ std::vector<std::vector<double>> diffus(std::vector<std::vector<double>>& uh, do
 			K[p][j] = 0.5 / (h * h) * K[p][j];
 		}
 	}
-	return K;
 }
