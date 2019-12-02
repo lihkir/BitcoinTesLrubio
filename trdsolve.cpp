@@ -15,24 +15,24 @@ void trdsolve(std::map<int, std::vector<std::vector<double>>>& A1, std::map<int,
 
     lutrb(A, B, C);
 
-    std::vector<std::vector<double>> bz = SubCol(b, 0);
+    std::vector<std::vector<double>> bz = sub_col(b, 0);
     fwdsolve(A[0], bz); UpdateCol(b, bz,0);
     
     for (int i = 1; i < n; i++) 
     {
-        std::vector<std::vector<double>> bl = SubCol(b, i - 1);
-        std::vector<std::vector<double>> bc = SubCol(b, i);
+        std::vector<std::vector<double>> bl = sub_col(b, i - 1);
+        std::vector<std::vector<double>> bc = sub_col(b, i);
         maxpy(B[i-1], bl, bc);  
         fwdsolve(A[i], bc); UpdateCol(b, bc, i);
     }
 
-    std::vector<std::vector<double>> bn = SubCol(b, n-1);
+    std::vector<std::vector<double>> bn = sub_col(b, n-1);
     bwdsolve(A[n-1], bn); UpdateCol(b, bn, n-1);
 
     for (int i = n - 2; i >= (0); i -= 1) 
     {
-        std::vector<std::vector<double>> br = SubCol(b, i + 1);
-        std::vector<std::vector<double>> bc = SubCol(b, i);
+        std::vector<std::vector<double>> br = sub_col(b, i + 1);
+        std::vector<std::vector<double>> bc = sub_col(b, i);
         maxpy(C[i], br, bc); 
         bwdsolve(A[i], bc); UpdateCol(b, bc, i);
     }

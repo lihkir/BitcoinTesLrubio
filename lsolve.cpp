@@ -14,7 +14,7 @@ double lsolve(double a, std::vector<std::vector<double>> &u, std::vector<std::ve
   int m = u.size();
   int n = u[0].size() - 2 * pt_test->gc;
 
-  std::vector<std::vector<double>> v = SubMatrix(u, pt_test->gc);
+  std::vector<std::vector<double>> v = sub_matrix(u, pt_test->gc);
   
   std::map<int, std::vector<std::vector<double>>> D;
   std::map<int, std::vector<std::vector<double>>> L;
@@ -23,15 +23,15 @@ double lsolve(double a, std::vector<std::vector<double>> &u, std::vector<std::ve
   diffusion_matrix(v, h, a, D, L, U);
 
   double nrm2_b=0;
-  for (int j = 0; j < n; j++) nrm2_b += SquareSum(SubVector(b, j));
+  for (int j = 0; j < n; j++) nrm2_b += square_sum(sub_vector(b, j));
 
-  std::vector<std::vector<double>> w = SubMatrix(b, 0);
+  std::vector<std::vector<double>> w = sub_matrix(b, 0);
   trdsolve(D, L, U, b);
-  std::vector<std::vector<double>> r = SubMatrix(w, 0);
+  std::vector<std::vector<double>> r = sub_matrix(w, 0);
   residual(D, L, U, b, r);
   
   double nrm2_r = 0;
-  for (int j = 0; j < n; j++) nrm2_r += SquareSum(SubVector(r, j));
+  for (int j = 0; j < n; j++) nrm2_r += square_sum(sub_vector(r, j));
 
   return sqrt(nrm2_r/nrm2_b);
 }

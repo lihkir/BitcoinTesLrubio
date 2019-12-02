@@ -11,8 +11,8 @@ void apply_diffus(std::vector<std::vector<double>> &ut, std::vector<std::vector<
 	
 	int m = uh.size(); int n = uh[0].size() - 2 * pt_test->gc;
 
-	std::vector<std::vector<double>>   u = SubMatrix(uh, pt_test->gc);
-	std::vector<std::vector<double>> ut0 = SubMatrix(ut, pt_test->gc);
+	std::vector<std::vector<double>>   u = sub_matrix(uh, pt_test->gc);
+	std::vector<std::vector<double>> ut0 = sub_matrix(ut, pt_test->gc);
 	std::map<int, std::vector<std::vector<double>>> B = diffusion_tensor(ut0);
 
 	for (int p = 0; p < m; p++) 

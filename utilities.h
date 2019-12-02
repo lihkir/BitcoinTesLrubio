@@ -7,21 +7,6 @@
 #include <iomanip>
 #include "test_cases.h"
 
-template <class T> inline T max(T a, T b)
-{
-	return a > b ? a : b;
-}
-
-template <class T> inline T min(T a, T b)
-{
-	return a < b ? a : b;
-}
-
-template <typename T> inline int sgn(T val) 
-{
-	return (T(0) < val) - (val < T(0));
-}
-
 template <class T> void PrintingContainer(const std::vector<T>& v, int d)
 {
 	std::cout << std::fixed;
@@ -41,13 +26,6 @@ template <class T> void PrintingContainer(const std::vector<std::vector<T>>& m, 
 		std::cout << "\n";
 	}
 	std::cout << "\n";
-}
-
-template <class T> T VectorSum(const std::vector<T>& v)
-{
-	T s{};
-	for (unsigned int i = 0; i != v.size(); i++) s = s + v[i];
-	return s;
 }
 
 template <class T> std::vector<T> RandomVector(int length, double nmax)
@@ -70,7 +48,29 @@ template <class T> std::vector<std::vector<T>> RandomMatrix(int M_rows, int N_co
 	return m;
 }
 
-template <class T> std::vector<T> Col(const std::vector<std::vector<T>>& m, int j)
+template <class T> inline T max(T a, T b)
+{
+	return a > b ? a : b;
+}
+
+template <class T> inline T min(T a, T b)
+{
+	return a < b ? a : b;
+}
+
+template <typename T> inline int sgn(T val) 
+{
+	return (T(0) < val) - (val < T(0));
+}
+
+template <class T> T vector_sum(const std::vector<T>& v)
+{
+	T s{};
+	for (unsigned int i = 0; i != v.size(); i++) s = s + v[i];
+	return s;
+}
+
+template <class T> std::vector<T> col(const std::vector<std::vector<T>>& m, int j)
 {
 	std::vector<T> c(m.size());
 	for (unsigned int i = 0; i < c.size(); i++)
@@ -78,7 +78,7 @@ template <class T> std::vector<T> Col(const std::vector<std::vector<T>>& m, int 
 	return c;
 }
 
-template <class T> T DotProduct(const std::vector<T>& u, const std::vector<T>& v)
+template <class T> T dot_product(const std::vector<T>& u, const std::vector<T>& v)
 {
 	T s{};
 	for (unsigned int i = 0; i < u.size(); i++)
@@ -86,7 +86,7 @@ template <class T> T DotProduct(const std::vector<T>& u, const std::vector<T>& v
 	return s;
 }
 
-template <class T> T SquareSum(const std::vector<T>& u)
+template <class T> T square_sum(const std::vector<T>& u)
 {
 	T s{};
 	for (unsigned int i = 0; i < u.size(); i++)
@@ -99,7 +99,7 @@ template <typename T, typename U> auto max(T x, U y) -> decltype(x > y ? x : y)
 	return x > y ? x : y;
 }
 
-template <class T> std::vector<std::vector<double>> SubMatrix(const std::vector<std::vector<T>>& m, int gc)
+template <class T> std::vector<std::vector<double>> sub_matrix(const std::vector<std::vector<T>>& m, int gc)
 {
 	int N_int = (int)m[0].size() - 2 * gc;
 	std::vector<std::vector<double>> R(m.size(), std::vector<double>(N_int));
@@ -111,14 +111,14 @@ template <class T> std::vector<std::vector<double>> SubMatrix(const std::vector<
 	return R;
 }
 
-template <class T> std::vector<T> SubVector(const std::vector<std::vector<T>>& m, int col)
+template <class T> std::vector<T> sub_vector(const std::vector<std::vector<T>>& m, int col)
 {
 	std::vector<T> R(m.size());
 	for (unsigned int i = 0; i < R.size(); i++) R[i] = m[i][col];
 	return R;
 }
 
-template <class T> std::vector<std::vector<T>> SubCol(const std::vector<std::vector<T>>& m, int col)
+template <class T> std::vector<std::vector<T>> sub_col(const std::vector<std::vector<T>>& m, int col)
 {
 	std::vector<std::vector<T>> R(m.size(), std::vector<T>(1));
 	for (unsigned int i = 0; i < R.size(); i++) R[i][0] = m[i][col];

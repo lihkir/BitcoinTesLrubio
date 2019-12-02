@@ -1,14 +1,13 @@
+#include <iostream>
+#include <cstdio>
+#include <cmath>
+
 if (global::idx_test == 1)
 {
     std::vector<double> dens;
-    dens.push_back(8.590500e-04);
-    dens.push_back(6.409600e-03);
-    dens.push_back(4.430900e-02);
-    dens.push_back(7.928000e-02);
-    dens.push_back(4.706500e-02);
-    dens.push_back(1.571200e-02);
-    dens.push_back(5.720500e-03);
-    dens.push_back(1.758300e-03);
+    dens.push_back(0.04);
+    dens.push_back(0.04);
+    dens.push_back(0.04);
     
     for (int i = 0; i < pt_test->M_rows; i++) 
         for (int j = 0 ; j < N_cols; j++)
@@ -71,7 +70,8 @@ else if ( global::idx_test == 3 )
 //      }
 //    }
 //  }
-//  else {
-//    std::cerr<<"Test "<<test<<"Not defined"<<std::endl;
-//    exit(1);
-//  }
+else
+{
+    std::cerr<<"Test "<< global::idx_test <<"Not defined"<< std::endl;
+    exit(1);
+}

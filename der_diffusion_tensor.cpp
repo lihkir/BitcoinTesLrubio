@@ -17,7 +17,7 @@ std::map<int, std::vector<std::vector<double>>> der_diffusion_tensor(std::vector
 	
 	for (int k = 0; k < n; k++)
 	{
-		double phit = VectorSum(Col(u, k));
+		double phit = vector_sum(col(u, k));
 		if (phit > 1)
 		{	
 			printf("\nInside der_diffusion_tensor: phit = %0.16f\n", phit);
@@ -27,7 +27,7 @@ std::map<int, std::vector<std::vector<double>>> der_diffusion_tensor(std::vector
 		Bsol[k] = Bele;
 		for (int i = 0; i < m; i++)
 		{
-			Bsol[k][i][i] = -global::D0 * pt_test->nexp * pow(1 - phit, pt_test->nexp - 1);
+			Bsol[k][i][i] = -pt_test->nexp * pow(1 - phit, pt_test->nexp - 1);
 		}
 	}
 	return Bsol;

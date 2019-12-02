@@ -37,7 +37,7 @@ void numflux_glf(std::vector<std::vector<double>>& v, std::vector<std::vector<do
 
 	for (int i = 0; i < n + 2 * pt_test->gc; i++)
 	{
-		vi = SubVector(v, i); fi = fn_flux(vi);
+		vi = sub_vector(v, i); fi = fn_flux(vi);
 		for (int j = 0; j < m; j++) 
 			f[j][i] = fi[j];
 	}

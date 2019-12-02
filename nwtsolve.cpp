@@ -17,37 +17,37 @@ void nwtsolve(double a, std::vector<std::vector<double>> &b, std::vector<std::ve
     int m = u.size();
     int n = u[0].size() - 2*pt_test->gc;
 
-    std::vector<std::vector<double>> v = SubMatrix(u, pt_test->gc);
+    std::vector<std::vector<double>> v = sub_matrix(u, pt_test->gc);
     
     std::map<int, std::vector<std::vector<double>>> D;
     std::map<int, std::vector<std::vector<double>>> L;
     std::map<int, std::vector<std::vector<double>>> U;
 
     diffusion_matrix(v, h, a, D, L, U);
-    std::vector<std::vector<double>> r = SubMatrix(b, 0);
+    std::vector<std::vector<double>> r = sub_matrix(b, 0);
     residual(D, L, U, v, r); /** r = b-(L||D||U)*v **/
     
     double nrm2_b = 0;
-    for (int j = 0; j < n; j++) nrm2_b += SquareSum(SubVector(b, j));
+    for (int j = 0; j < n; j++) nrm2_b += square_sum(sub_vector(b, j));
 
     for (int its = 0; its < maxits; its++) 
     {
         newton_matrix(v, h, a, D, L, U);
-        std::vector<std::vector<double>> du = SubMatrix(r, 0);
+        std::vector<std::vector<double>> du = sub_matrix(r, 0);
         trdsolve(D, L, U, du);
-        std::vector<std::vector<double>> r1 = SubMatrix(r, 0);
+        std::vector<std::vector<double>> r1 = sub_matrix(r, 0);
         residual(D, L, U, du, r1);
         
         double nrm2_r0 = 0;
-        for (int j = 0; j < n; j++) nrm2_r0 += SquareSum(SubVector(r1, j));
+        for (int j = 0; j < n; j++) nrm2_r0 += square_sum(sub_vector(r1, j));
 
         diffusion_matrix(v, h, a, D, L, U);
 
-        std::vector<std::vector<double>> r = SubMatrix(b, 0);
+        std::vector<std::vector<double>> r = sub_matrix(b, 0);
         residual(D, L, U, v, r);
         
         double phi0 = 0;
-        for (int j = 0; j < n; j++) phi0 =+ SquareSum(SubVector(r, j));
+        for (int j = 0; j < n; j++) phi0 =+ square_sum(sub_vector(r, j));
         
         double alpha = 1;
         double phi = 2*phi0 + 1;
@@ -59,20 +59,20 @@ void nwtsolve(double a, std::vector<std::vector<double>> &b, std::vector<std::ve
                     v[i][j] = v[i][j] + alpha*du[i][j];
             
             diffusion_matrix(v, h, a, D, L, U);
-            std::vector<std::vector<double>> r = SubMatrix(b, 0);
+            std::vector<std::vector<double>> r = sub_matrix(b, 0);
             residual(D, L, U, v, r);
             
             phi = 0;
-            for (int j = 0; j < n; j++) phi += SquareSum(SubVector(r, j)); 
+            for (int j = 0; j < n; j++) phi += square_sum(sub_vector(r, j)); 
             alpha = alpha/2;
         }
   
         diffusion_matrix(v, h, a, D, L, U);
-        std::vector<std::vector<double>> rh = SubMatrix(b, 0);
+        std::vector<std::vector<double>> rh = sub_matrix(b, 0);
         residual(D, L, U, v, rh);
         
         double nrm2_r=0;
-        for (int j = 0; j < n; j++) nrm2_r += SquareSum(SubVector(rh, j)); 
+        for (int j = 0; j < n; j++) nrm2_r += square_sum(sub_vector(rh, j)); 
         
         double beta = nrm2_r;
         if  (nrm2_r > 0) printf("\t%3d %e %e\n", its, sqrt(nrm2_r), sqrt(nrm2_r0));

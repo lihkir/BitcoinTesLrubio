@@ -12,7 +12,7 @@ std::vector<std::vector<double>> jacobiana_dec(std::vector<double>& phi)
 
 	std::vector<std::vector<double>> Jdec(N, std::vector<double>(N));
 
-	double rho = VectorSum(phi);
+	double rho = vector_sum(phi);
 	double wrho = sed_hsf(rho);
 	double w1rho = sed_hsf_der(rho);
 

@@ -116,7 +116,7 @@ void do_rkimex(std::vector<std::vector<double>>& A, std::vector<double>& b, std:
         for (int p = 0; p < m; p++)
           B[p][q] = B[p][q] + dt*Ah[l+1][j]*Kh[j][p][q];
 
-    std::vector<std::vector<double>> ul = SubMatrix(u, 0);  
+    std::vector<std::vector<double>> ul = sub_matrix(u, 0);  
     nwtsolve(dt*A[l][l], B, ul, h, dt, maxits, tol); 
     diffus(ul, h, K0);
 

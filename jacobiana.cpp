@@ -11,7 +11,7 @@ std::vector<std::vector<double>> jacobiana(std::vector<double>& phi)
 
 	std::vector<std::vector<double>> jac(N, std::vector<double>(N));
 
-	double rho = VectorSum(phi);
+	double rho = vector_sum(phi);
 	double u = sed_hsf(rho);
 	double v = sed_hsf_der(rho);
 

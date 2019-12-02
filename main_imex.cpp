@@ -34,6 +34,9 @@
 #include "residual.h"
 #include "lsolve.h"
 #include "rkimex.h"
+#include "solid_stress.h"
+#include "solid_stress_der.h"
+#include "deltak.h"
 
 using namespace std;
 
@@ -76,7 +79,6 @@ int main(int argc, char* argv[])
   	double cfl = atof(argv[6]);
   	int imex_type = atoi(argv[7]);
 	std::vector<double> Ta = parse_times(argv[8]);
-  	// double T = atof(argv[8]);
 	const char *outname= argv[9];
 
  	struct test_cases* pt_test = get_tests();
@@ -111,18 +113,7 @@ int main(int argc, char* argv[])
       	Ah.push_back(std::vector<double>(2)); Ah.push_back(Ahrow);
       	bh.push_back(0.5); bh.push_back(0.5);
     }
-  
-  	printf("b.size() = % ld:\nb = \n\n", b.size());
-  	PrintingContainer(b, 4);
-  	printf("Arows = % ld\tAcols = % ld:\nA = \n\n", A.size(), A[0].size());
-  	PrintingContainer(A, 4);
-  
-  	printf("bh.size() = % ld:\nbh = \n\n", bh.size());
-  	PrintingContainer(bh, 4);
-  	printf("Ahrows = % ld\tAhcols = % ld:\nAh = \n\n", Ah.size(), Ah[0].size());
-  	PrintingContainer(Ah, 4);
-
-	printf("\nFunction: rkimex.cpp\n");
+  	printf("\nFunction: rkimex.cpp\n");
 	rkimex(A, b, Ah, bh, u0, Ta, cfl, pt_test->L, pt_test->convec_type, imex_type, global::idx_test);
   	
 	ofstream fileout(outname);
@@ -131,5 +122,22 @@ int main(int argc, char* argv[])
       		fileout << std::fixed << std::setprecision(16) << std::scientific << u0[i][j] << endl;
   	fileout.close();
 
+	/****************************************************************************************/
+	printf("\nTesting solid_stress function:\n");
+	printf("\nsolid_stress(phi) = %0.16f\n", solid_stress(0.5));
+
+	printf("\nTesting solid_stress function derivative:\n");
+	printf("\nsolid_stress_der(phi) = %0.16f\n", solid_stress_der(0.5));
+
+	printf("\nTesting deltak function:\n");
+	printf("\ndeltak(i, j) = %0.16f\n", deltak(2, 2));
+	
+	printf("\nTesting sed_hsf function:\n");
+	printf("\nsed_hsf(d) = %0.16f\n", sed_hsf(0.4539393939393940));
+
+	printf("\nTesting sed_hsf_der function:\n");
+	printf("\nsed_hsf_der(d) = %0.16f\n", sed_hsf_der(0.4539393939393940));
+	
+	/****************************************************************************************/
 	return 0;
 }

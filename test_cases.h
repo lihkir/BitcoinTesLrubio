@@ -19,13 +19,19 @@ struct test_cases
 	double phimax;
 	int gc_id;
 	double g;
-	double mu_c;
-	double rho_d;
-	double rho_c;
-	double vinf;
 	double L;
 	double nexp;
 	int convec_type;
+	double sigma0;
+	double k;
+	double phic;
+	double mu_f;
+	double rho_s;
+	double phi0;
+	double vphis;
+	double vphis_der;
+	double mudrho;
+	double muog;
 };
 
 #endif
