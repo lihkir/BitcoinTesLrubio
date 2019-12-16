@@ -12,13 +12,14 @@
 
 void nwtsolve(double a, std::vector<std::vector<double>> &b, std::vector<std::vector<double>> &u, double h, double dt, int maxits, double tol)
 {
+    printf("\nNewton Solver:\n");
     struct test_cases* pt_test = get_tests();
-
+    
     int m = u.size();
     int n = u[0].size() - 2*pt_test->gc;
-
-    std::vector<std::vector<double>> v = sub_matrix(u, pt_test->gc);
     
+    std::vector<std::vector<double>> v = sub_matrix(u, pt_test->gc);
+
     std::map<int, std::vector<std::vector<double>>> D;
     std::map<int, std::vector<std::vector<double>>> L;
     std::map<int, std::vector<std::vector<double>>> U;
@@ -26,15 +27,17 @@ void nwtsolve(double a, std::vector<std::vector<double>> &b, std::vector<std::ve
     diffusion_matrix(v, h, a, D, L, U);
     std::vector<std::vector<double>> r = sub_matrix(b, 0);
     residual(D, L, U, v, r); /** r = b-(L||D||U)*v **/
-    
+
     double nrm2_b = 0;
     for (int j = 0; j < n; j++) nrm2_b += square_sum(sub_vector(b, j));
 
     for (int its = 0; its < maxits; its++) 
     {
         newton_matrix(v, h, a, D, L, U);
+
         std::vector<std::vector<double>> du = sub_matrix(r, 0);
-        trdsolve(D, L, U, du);
+        trdsolve(D, L, U, du); /** Checking Here **/
+        
         std::vector<std::vector<double>> r1 = sub_matrix(r, 0);
         residual(D, L, U, du, r1);
         
@@ -71,19 +74,19 @@ void nwtsolve(double a, std::vector<std::vector<double>> &b, std::vector<std::ve
         std::vector<std::vector<double>> rh = sub_matrix(b, 0);
         residual(D, L, U, v, rh);
         
-        double nrm2_r=0;
+        double nrm2_r = 0;
         for (int j = 0; j < n; j++) nrm2_r += square_sum(sub_vector(rh, j)); 
         
         double beta = nrm2_r;
-        if  (nrm2_r > 0) printf("\t%3d %e %e\n", its, sqrt(nrm2_r), sqrt(nrm2_r0));
+        if (nrm2_r > 0) printf("\t%3d %e %e\n", its, sqrt(nrm2_r), sqrt(nrm2_r0));
   
-        if  (nrm2_r < tol*tol*nrm2_b) 
+        if (nrm2_r < tol*tol*nrm2_b) 
         {
             if  ( nrm2_r > 0 ) printf("----------\n");
             break;
         }
     }
-
+    
     for (unsigned int i = 0; i < v.size(); i++)
         for (unsigned int j = 0; j < v[0].size(); j++)
             u[i][pt_test->gc + j] = v[i][j];
