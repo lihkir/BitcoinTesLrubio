@@ -1,9 +1,5 @@
 function v = sige_reg_der(phi)
 
-global phic;
+v = exp_reg(phi)*(sige_der(phi) + 2*sige(phi)*quot_reg(phi));
 
-if (phi <= phic)
-    v = 0;
-else
-    v = sige_der(phi)*exp_reg(phi) + 2*sige(phi)*exp_reg(phi)*quot_reg(phi);
 end

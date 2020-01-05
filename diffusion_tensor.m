@@ -32,8 +32,9 @@ for k = 1:n
         sige  = solid_stress(phit);
         wphit = sed_hsf(phit);
         for i = 1:m
+            theta = phik(i)*(delta(i) - p2);
             for j = 1:m
-                B(i, j, k) = mu_g*wphit*(phik(i)*(delta(i) - p2)*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - phik(i)*quot*(delta(i) - p2))*sige)/phit;
+                B(i, j, k) = mu_g*wphit*(theta*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - quot*theta)*sige)/phit;
             end
         end
     else

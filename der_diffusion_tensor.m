@@ -37,8 +37,9 @@ for k = 1:n
         wphit  = sed_hsf(phit);
         wphitd = sed_hsf_der(phit);
         for i = 1:m
+            theta = phik(i)*(delta(i) - p2);
             for j = 1:m
-                B(i, j, k) = mu_g*((phit*wphitd - wphit)*quot2*(phik(i)*(delta(i) - p2)*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - phik(i)*quot3*(delta(i) - p2))*sige) + wphit*quot1*( phik(i)*(delta(i) - p2)*sigedd - ((1 - 2*phit)*quot4*phik(i)*(delta(i) - p2)*sige + siged*(delta(i)*kronecker(i, j) - delta(j)*phik(i) - phik(i)*(delta(i) - p2)*quot3))));
+                B(i, j, k) = mu_g*((phit*wphitd - wphit)*quot2*(theta*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - quot3*theta)*sige) + wphit*quot1*(theta*sigedd - ((1 - 2*phit)*quot4*theta*sige + siged*(delta(i)*kronecker(i, j) - delta(j)*phik(i) - theta*quot3))));
             end
         end
     else
