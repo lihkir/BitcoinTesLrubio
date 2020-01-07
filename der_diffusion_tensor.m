@@ -23,14 +23,12 @@ for k = 1:n
     end
 
     if (phit > 1)
-        error('phit > 1');
+        fprintf("\nphit > 1 in the column %d!!\n\n", k);
+        error('phit > 1!!');
     end
     
     if (diff_idx ~= 0)
-        quot1  = 1/phit;
-        quot2  = quot1^2;
-        quot3  = 1/phit*(1 - phit);
-        quot4  = quot3^2;
+        quot   = 1/phit*(1 - phit);
         sigedd = solid_stress_der_der(phit);
         siged  = solid_stress_der(phit);
         sige   = solid_stress(phit);
@@ -39,7 +37,9 @@ for k = 1:n
         for i = 1:m
             theta = phik(i)*(delta(i) - p2);
             for j = 1:m
-                B(i, j, k) = mu_g*((phit*wphitd - wphit)*quot2*(theta*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - quot3*theta)*sige) + wphit*quot1*(theta*sigedd - ((1 - 2*phit)*quot4*theta*sige + siged*(delta(i)*kronecker(i, j) - delta(j)*phik(i) - theta*quot3))));
+                psih = delta(i)*kronecker(i, j) - delta(j)*phik(i) - theta/phit;
+                B(i, j, k) = mu_g*((phit*wphitd - wphit)*(theta*siged - psih*sige*quot)/phit^2 + ... 
+                             wphit*(theta*sigedd - (theta*sige/phit^2 + psih*((1 - phit)*siged + sige)/(1 - phit))/(1 - phit))/phit);
             end
         end
     else

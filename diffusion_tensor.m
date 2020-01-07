@@ -23,18 +23,19 @@ for k = 1:n
     end
     
     if (phit > 1)
-        error('phit > 1');
+        fprintf("\nphit > 1 in the column %d!!\n\n", k);
+        error('phit > 1!!');
     end
     
     if (diff_idx ~= 0)
-        quot  = 1/phit*(1 - phit);
+        quot  = 1/(1 - phit);
         siged = solid_stress_der(phit);
         sige  = solid_stress(phit);
         wphit = sed_hsf(phit);
         for i = 1:m
             theta = phik(i)*(delta(i) - p2);
             for j = 1:m
-                B(i, j, k) = mu_g*wphit*(theta*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - quot*theta)*sige)/phit;
+                B(i, j, k) = mu_g*wphit*(theta*siged - (delta(i)*kronecker(i, j) - delta(j)*phik(i) - theta/phit)*sige*quot)/phit;
             end
         end
     else

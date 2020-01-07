@@ -70,7 +70,6 @@ K0=zeros(m, n);
 
 K=zeros(m, n, s);
 
-
 for l=1:s
   for q=1:n
     for p=1:m
@@ -81,21 +80,24 @@ for l=1:s
   for j=1:l-1
     for q=1:n
       for p=1:m
-	ul(p, q+gc)=ul(p, q+gc)+dt*A(l, j)*K(p, q, j);
+        ul(p, q+gc)=ul(p, q+gc)+dt*A(l, j)*K(p, q, j);
       end
     end
   end
+  
   ul=bc(ul);
   K0=diffus(ul, h, K0);
+  
   for j=1:n
     for i=1:m
       K(i, j, l)=K0(i, j);
     end
   end
+  
   K0=convec(ul, h, K0);
   for j=1:n
     for i=1:m
-      K(i, j, l)=K(i, j, l)+K0(i, j);
+      K(i, j, l)=K(i, j, l) + K0(i, j);
     end
   end
 end
@@ -108,6 +110,5 @@ for j=1:s
     end
   end
 end
-
 
 u=bc(u);

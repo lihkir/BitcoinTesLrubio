@@ -84,6 +84,7 @@ for i=gc+1:M+gc-1
     fh(j, i)=fh1(j);
   end    
 end
+
 for j=1:N
   fh(j, gc)=0;
   fh(j, M+gc)=0;

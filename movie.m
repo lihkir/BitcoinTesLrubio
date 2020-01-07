@@ -1,13 +1,16 @@
-x=[-2*pi:0.1:2*pi];
-fig = figure;
-mov = avifile('ejemplo.avi'); % Abrimos el video
-for k=1:17 % Para cada uno de los frames
-y=sin(x+k*pi/8);
-plot(x,y);
-F = getframe(fig); % Almacenamos la figura como frame
-mov = addframe(mov, F);
-end
-close(fig);
-mov = close(mov); % Cerramos la película
+n=(1:50)*2*pi ;
 
-,'compression','None'
+Y = sin(n*50) ;
+hp = plot(Y) ;              %// Generate the initial plot (and retrieve the handle of the graphic object)
+ylim([-1,1]) ;              %// Set the Y axes limits (once and for all)
+
+writerObj = VideoWriter('test2.avi'); %// initialize the VideoWriter object
+open(writerObj) ;
+for t = 1:1000
+   Y = sin(n*50/t) ;        %// calculate new Y values
+   set(hp,'YData',Y) ;      %// update the plot data (this does not generate a "new" plot), nor resize the axes
+
+   F = getframe ;           %// Capture the frame
+   writeVideo(writerObj,F)  %// add the frame to the movie
+end
+close(writerObj);

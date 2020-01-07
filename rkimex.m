@@ -36,6 +36,9 @@ t = 0;
 iter = 0;
 t0 = cputime();
 
+writerObj = VideoWriter('sed_movie.avi'); %// Initialize the VideoWriter object
+open(writerObj);
+
 for i = 1:length(Ta)
     T = Ta(i);
     while (t <  T)
@@ -72,7 +75,12 @@ for i = 1:length(Ta)
         plot(linspace(0, 1, n), u(:, gc+1:n+gc), 'o-');
         drawnow
         
+        F = getframe ;           %// Capture the frame
+        writeVideo(writerObj,F)  %// add the frame to the movie
     end
+    
+    close(writerObj);  %Close the movie
+    
     t1 = cputime();
     fprintf('CPUTIME T=%.16f => %.16f\n', T, t1-t0);
     
