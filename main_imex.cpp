@@ -5,48 +5,9 @@
 #include <ctime>
 #include <cstdlib>
 #include <cstdio>
-#include <vector>
-#include <map>
 #include <assert.h>
-#include <iomanip>
 #include "test_cases.h"
 #include "containers.h"
-#include "sed_hsf.h"
-#include "sed_hsf_der.h"
-#include "average.h"
-#include "bc.h"
-#include "fn_flux.h"
-#include "matmult.h"
-#include "hornerm.h"
-#include "lminmax_charspeed.h"
-#include "minmax_charspeed.h"
-#include "diffusion_tensor.h"
-#include "sige.h"
-#include "sige_der.h"
-#include "sige_der_der.h"
-#include "exp_reg.h"
-#include "sige_reg.h"
-#include "sige_reg_der.h"
-#include "sige_reg_der_der.h"
-#include "solid_stress.h"
-#include "solid_stress_der.h"
-#include "solid_stress_der_der.h"
-#include "der_diffusion_tensor.h"
-#include "charspeed.h"
-#include "apply_diffus.h"
-#include "diffusion_tensor.h"
-#include "diffus.h"
-#include "diffus_charspeed.h"
-#include "diffusion_matrix.h"
-#include "jacobiana.h"
-#include "jacobiana_dec.h"
-#include "weno5.h"
-#include "convec.h"
-#include "residual.h"
-#include "lsolve.h"
-#include "trdsolve.h"
-#include "nwtsolve.h"
-#include "newton_matrix.h"
 #include "rkimex.h"
 
 using namespace std;
@@ -83,13 +44,13 @@ int main(int argc, char* argv[])
 
 #include "init.h"
 
-	Matrix<double> A(1, 1);
-  	Vector<double> b(1);
+	Matrix<double> *ptA = new Matrix<double>(1, 1); Matrix<double> &A = *ptA;
+	Vector<double> *ptb = new Vector<double>(1); Vector<double> &b = *ptb;
 	A(1, 1) = 0.5;
 	b(1) = 1;
 
-  	Matrix<double> Ah(2, 2);
-  	Vector<double> bh(2);
+	Matrix<double> *ptAh = new Matrix<double>(2, 2); Matrix<double> &Ah = *ptAh;
+	Vector<double> *ptbh = new Vector<double>(2); Vector<double> &bh = *ptbh;
 	Ah(2, 1) = 1;
 	bh(1) = 0.5;
 	bh(2) = 0.5;
@@ -115,6 +76,10 @@ int main(int argc, char* argv[])
 
   	delete pu0;
 	delete pt_test->delta;
+	delete ptA;
+	delete ptb;
+	delete ptAh;
+	delete ptbh;
 
 	return 0;
 }

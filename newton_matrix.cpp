@@ -12,8 +12,9 @@ void newton_matrix(Matrix<double> &u, double h, double a, Block<double> &D, Bloc
     double f = -a*0.5/(h*h);
     double z;    
 
-    Block<double> B(n, m, m);
-    Block<double> Bp(n, m, m);
+    Block<double> *ptB = new Block<double>(n, m, m); Block<double> &B = *ptB;
+    Block<double> *ptBp = new Block<double>(n, m, m); Block<double> &Bp = *ptBp;
+
     diffusion_tensor(u, B);
 
     for (int j = 1; j <= n; j++)
@@ -64,4 +65,7 @@ void newton_matrix(Matrix<double> &u, double h, double a, Block<double> &D, Bloc
     for (int i = 1; i <= n; i++)
         for (int r = 1; r <= m; r++)
             D(i, r, r) = D(i, r, r) + 1;
+
+    delete ptB;
+    delete ptBp;
 }

@@ -10,9 +10,10 @@ void diffus(Matrix<double>& u1, double h, Matrix<double> &K)
 	int n = size(u1, 2) - 2*pt_test->gc;
 	int m = size(u1, 1);
 
-	Matrix<double> u(m, n);
+	Matrix<double> *ptu = new Matrix<double>(m, n); Matrix<double> &u = *ptu;
 	update_inside(u, u1, pt_test->gc);
-	Block<double> B(n, m, m);
+
+	Block<double> *ptB = new Block<double>(n, m, m); Block<double> &B = *ptB;
 	diffusion_tensor(u, B);
 
 	for (int p = 1; p <= m; p++)
@@ -33,4 +34,6 @@ void diffus(Matrix<double>& u1, double h, Matrix<double> &K)
             K(p, j) = 0.5*K(p, j)/(h*h);
 		}
 	}
+	delete ptB;
+	delete ptu;
 }

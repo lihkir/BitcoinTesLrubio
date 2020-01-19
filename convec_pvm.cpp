@@ -27,12 +27,12 @@ void convec_pvm(Matrix<double>& v, double h, Matrix<double>& K)
 		n_coef = 5;
 	else
 		n_coef = 5;
-	
-	Matrix<double> S(2, M + 2*pt_test->gc);
-	Matrix<double> ul(N, M + 2 * pt_test->gc);
-	Matrix<double> ur(N, M + 2 * pt_test->gc);
-	Matrix<double> fh(N, M + 2 * pt_test->gc);
-	Matrix<double> fh1(N, 1);
+
+	Matrix<double> *ptS   =  new Matrix<double>(2, M + 2*pt_test->gc);   Matrix<double> &S  = *ptS;	
+	Matrix<double> *ptul  =  new Matrix<double>(N, M + 2 * pt_test->gc); Matrix<double> &ul = *ptul;
+	Matrix<double> *ptur  =  new Matrix<double>(N, M + 2 * pt_test->gc); Matrix<double> &ur = *ptur;
+	Matrix<double> *ptfh  =  new Matrix<double>(N, M + 2 * pt_test->gc); Matrix<double> &fh = *ptfh;	
+	Matrix<double> *ptfh1 =  new Matrix<double>(N, 1); Matrix<double> &fh1 = *ptfh1;
 
 	Matrix<double> *ptA;
 	int N5;
@@ -45,18 +45,18 @@ void convec_pvm(Matrix<double>& v, double h, Matrix<double>& K)
 	}
 	Matrix<double> &A = *ptA;
 
-	Matrix<double> Al(N, N); 
-	Matrix<double> fl(N, 1);
-	Matrix<double> fr(N, 1);
-	Matrix<double> ua(N, 1);
-	Matrix<double> dif(N, 1);
-	Matrix<double> uli(N, 1);
-	Matrix<double> uri(N, 1);
-	Matrix<double> Qurmul(N, 1);
-	Matrix<double> Qc(n_coef, 1);
-	Matrix<double> Si(2, 1);
-	Matrix<double> Sl(2, 1);
-	Matrix<double> Sr(2, 1);
+	Matrix<double> *ptAl  = new Matrix<double>(N, N); Matrix<double> &Al  = *ptAl;
+	Matrix<double> *ptfl  = new Matrix<double>(N, 1); Matrix<double> &fl  = *ptfl;
+	Matrix<double> *ptfr  = new Matrix<double>(N, 1); Matrix<double> &fr  = *ptfr;
+	Matrix<double> *ptua  = new Matrix<double>(N, 1); Matrix<double> &ua  = *ptua;
+	Matrix<double> *ptdif = new Matrix<double>(N, 1); Matrix<double> &dif = *ptdif;
+	Matrix<double> *ptuli = new Matrix<double>(N, 1); Matrix<double> &uli = *ptuli;
+	Matrix<double> *pturi = new Matrix<double>(N, 1); Matrix<double> &uri = *pturi;
+	Matrix<double> *ptQurmul = new Matrix<double>(N, 1); Matrix<double> &Qurmul = *ptQurmul;
+	Matrix<double> *ptQc = new Matrix<double>(n_coef, 1); Matrix<double> &Qc = *ptQc;
+	Matrix<double> *ptSi = new Matrix<double>(2, 1); Matrix<double> &Si = *ptSi;
+	Matrix<double> *ptSl = new Matrix<double>(2, 1); Matrix<double> &Sl = *ptSl;
+	Matrix<double> *ptSr = new Matrix<double>(2, 1); Matrix<double> &Sr = *ptSr;
 
 	bc(v);
 	minmax_charspeed(v, S);
@@ -99,4 +99,21 @@ void convec_pvm(Matrix<double>& v, double h, Matrix<double>& K)
     		K(j, i - pt_test->gc) = -(fh(j, i) - fh(j, i - 1))/h;
 
 	delete ptA;
+	delete ptfr;
+	delete ptQc;
+	delete ptQurmul;
+	delete ptS;
+	delete ptSi;
+	delete ptSl;
+	delete ptSr;
+	delete ptua;
+	delete ptul;
+	delete ptuli;
+	delete ptur;
+	delete pturi;
+	delete ptAl;
+	delete ptdif;
+	delete ptfh;
+	delete ptfh1;
+	delete ptfl;
 }

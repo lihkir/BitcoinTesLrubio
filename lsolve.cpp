@@ -13,15 +13,15 @@ double lsolve(double a, Matrix<double> &u, Matrix<double> &b, double h)
   int m = size(u, 1);
   int n = size(u, 2) - 2*pt_test->gc;
 
-  Matrix<double> v(m, n);
-  Matrix<double> bj(m, 1);
-  Matrix<double> rj(m, 1);
+  Matrix<double> *ptv = new Matrix<double>(m, n);  Matrix<double> &v = *ptv;
+  Matrix<double> *ptbj = new Matrix<double>(m, 1); Matrix<double> &bj = *ptbj;
+  Matrix<double> *ptrj = new Matrix<double>(m, 1); Matrix<double> &rj = *ptrj;
   update_inside(v, u, pt_test->gc);
   
-  Block<double> D(n, m, m);
-  Block<double> L(n, m, m);
-  Block<double> U(n, m, m);
-
+  Block<double> *ptD = new Block<double>(n, m, m); Block<double> &D = *ptD;
+  Block<double> *ptL = new Block<double>(n, m, m); Block<double> &L = *ptL;
+  Block<double> *ptU = new Block<double>(n, m, m); Block<double> &U = *ptU;
+  
   diffusion_matrix(v, h, a, D, L, U);
   
   double nrm2_b = 0;
@@ -31,7 +31,7 @@ double lsolve(double a, Matrix<double> &u, Matrix<double> &b, double h)
     nrm2_b += dot_product(bj, bj);
   }
   
-  Matrix<double> r(m, n);
+  Matrix<double> *ptr = new Matrix<double>(m, n);  Matrix<double> &r = *ptr;
 
   update_inside(v, b, 0);
   trdsolve(D, L, U, b);
@@ -47,4 +47,12 @@ double lsolve(double a, Matrix<double> &u, Matrix<double> &b, double h)
   }
 
   return sqrt(nrm2_r/nrm2_b);
+
+  delete ptbj;
+  delete ptD;
+  delete ptL;
+  delete ptr;
+  delete ptrj;
+  delete ptU;
+  delete ptv;
 }

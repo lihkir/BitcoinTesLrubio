@@ -22,4 +22,7 @@ void jacobiana(Matrix<double> &phi, Matrix<double> &jac)
 
 	for (int i = 1; i <= N; i++)	
     	jac(i, i) = jac(i, i) + u*(delta(i) - p2);
+
+	delete pt_test->delta;
+	delete pt_test;
 }

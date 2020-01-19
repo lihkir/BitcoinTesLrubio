@@ -11,8 +11,8 @@ void bc(Matrix<double>& u)
 	{
 		for (int i = 1; i <= m; i++)
 		{
-			u(i, j)=u(i, 2*pt_test->gc + 1 - j);
-			u(i, pt_test->gc + n + j)=u(i, pt_test->gc + 1 + n - j);			
+			u(i, j) = u(i, 2*pt_test->gc + 1 - j);
+			u(i, pt_test->gc + n + j) = u(i, pt_test->gc + 1 + n - j);			
 		}		
 	}
 }

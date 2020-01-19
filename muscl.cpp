@@ -19,8 +19,6 @@ void muscl(Matrix<double>& u, Matrix<double>& ul, Matrix<double>& ur)
 			du = minmod(u(j, i)-u(j, i-1), u(j, i+1)-u(j, i));
     		ur(j, i-1)=u(j, i)-0.5*du;
     		ul(j, i)=u(j, i)+0.5*du;
-			// ur(i-1)=u(j, i);
-    		// ul(i)=u(j, i);
 		}
 	}
 }

@@ -14,7 +14,7 @@ void convec_glf(Matrix<double>& v, double h, Matrix<double>& K)
 	int n = size(v, 2) - 2*pt_test->gc;
 	int m = size(v, 1);
 
-	Matrix<double> fh(m, n+1);
+	Matrix<double> *ptfh = new Matrix<double>(m, n + 1); Matrix<double> &fh = *ptfh;
 	numflux_glf(v, fh);
 
 	for (int i = 1; i <= m; i++)
@@ -24,6 +24,7 @@ void convec_glf(Matrix<double>& v, double h, Matrix<double>& K)
 			K(i, j) = -(fh(i, j + 1) - fh(i, j))/h;
 		}
 	}	
+	delete ptfh;
 }
 
 void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
@@ -35,9 +36,9 @@ void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
 	int m = size(v, 1);
 	double fp0, fm0;
 
-	Matrix<double> fi(m, 1);
-	Matrix<double> vi(m, 1);
-	Matrix<double> f(m, n + 2*pt_test->gc);
+	Matrix<double> *ptfi = new Matrix<double>(m, 1); Matrix<double> &fi = *ptfi;
+	Matrix<double> *ptvi = new Matrix<double>(m, 1); Matrix<double> &vi = *ptvi;
+	Matrix<double> *ptf  = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &f = *ptf;
 	
 	for (int i = 1; i <= n + 2*pt_test->gc; i++)
 	{
@@ -47,8 +48,8 @@ void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
 			f(j, i) = fi(j);
 	}
 
-	Matrix<double> fp(m, n + 2*pt_test->gc);
-	Matrix<double> fm(m, n + 2*pt_test->gc);
+	Matrix<double> *ptfp = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &fp = *ptfp;
+	Matrix<double> *ptfm = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &fm = *ptfm;
 
 	for (int i = 1; i <= m; i++)
 	{
@@ -59,7 +60,7 @@ void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
 		}
 	}
 
-	Matrix<double> f1(5,1);
+	Matrix<double> *ptf1 = new Matrix<double>(5, 1); Matrix<double> &f1 = *ptf1;
 	
 	for (int k = 1; k <= m; k++)
 	{
@@ -83,4 +84,11 @@ void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
 		fh(i, n + 1) = 0;
 		fh(i, 1) = 0;
 	}
+
+	delete ptf;
+	delete ptf1;
+	delete ptfi;
+	delete ptfm;
+	delete ptfp;
+	delete ptvi;
 }

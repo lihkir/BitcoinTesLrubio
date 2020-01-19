@@ -19,7 +19,7 @@ void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<dou
   int m = size(u0, 1);
   int n = size(u0, 2);
 
-  Matrix<double> u(m, n + 2*pt_test->gc);
+  Matrix<double> *ptu = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &u = *ptu;
   update_inside(u, u0, pt_test->gc);
   
   bc(u);
@@ -69,11 +69,11 @@ void do_rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<
   int n = size(u, 2) - 2*pt_test->gc;
   int m = size(u, 1);
 
-  Matrix<double> ul(m, n + 2*pt_test->gc);
-  Matrix<double> K0(m, n);
+  Matrix<double> *ptul = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &ul = *ptul;
+  Matrix<double> *ptK0 = new Matrix<double>(m, n); Matrix<double> &K0 = *ptK0;
 
-  Block<double> K(s, m, n);
-  Block<double> Kh(s + 1, m, n);
+  Block<double> *ptK = new Block<double>(s, m, n); Block<double> &K = *ptK;
+  Block<double> *ptKh = new Block<double>(s + 1, m, n); Block<double> &Kh = *ptKh;
 
   convec(u, h, K0);
 
@@ -81,7 +81,7 @@ void do_rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<
     for (int i = 1; i <= m; i++)
       Kh(1, i, j) = K0(i, j);
 
-  Matrix<double> B(m, n);
+  Matrix<double> *ptB = new Matrix<double>(m, n); Matrix<double> &B = *ptB;
   
   for (int l = 1; l <= s; l++)
   {
@@ -130,6 +130,12 @@ void do_rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<
   }
 
   bc(u);
+
+  delete ptul;
+  delete ptK0;
+  delete ptB;
+  delete ptK;
+  delete ptKh;
 }
 
 /*****************************************************************************/
@@ -142,12 +148,12 @@ void do_lirkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &At, Matri
   int n = size(u, 2) - 2*pt_test->gc;
   int m = size(u, 1);
 
-  Matrix<double> K0(m, n);
-  Block<double> K(s, m, n);
+  Matrix<double> *ptK0 = new Matrix<double>(m, n); Matrix<double> &K0 = *ptK0;
+  Block<double> *ptK = new Block<double>(s, m, n); Block<double> &K = *ptK;
 
-  Matrix<double> ut(m, n + 2*pt_test->gc);
-  Matrix<double> uh(m, n + 2*pt_test->gc);
-  Matrix<double> R(m, n);
+  Matrix<double> *ptut = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &ut = *ptut;
+  Matrix<double> *ptuh = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &uh = *ptuh;
+  Matrix<double> *ptR = new Matrix<double>(m, n); Matrix<double> &R = *ptR;
 
   for (int l = 1; l <= s; l++)
   {
@@ -190,4 +196,10 @@ void do_lirkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &At, Matri
         u(p, q + pt_test->gc) = u(p, q + pt_test->gc) + dt*b(j)*K(j, p, q);
 
   bc(u);
+
+  delete ptK0;
+  delete ptK;
+  delete ptut;
+  delete ptuh;
+  delete ptR;  
 }

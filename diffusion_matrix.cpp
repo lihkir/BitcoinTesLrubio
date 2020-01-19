@@ -9,7 +9,8 @@ void diffusion_matrix(Matrix<double>& u, double h, double a, Block<double> &D, B
 
 	double z;
 	double f = -a*0.5/(h*h);
-	Block<double> B(n, m, m);
+
+	Block<double> *ptB = new Block<double>(n, m, m); Block<double> &B = *ptB;
 	diffusion_tensor(u, B);
 
 	for (int j = 1; j <= n; j++)
@@ -55,4 +56,6 @@ void diffusion_matrix(Matrix<double>& u, double h, double a, Block<double> &D, B
 	for (int j = 1; j <= n; j++)
 		for (int i = 1; i <= m; i++)
 			D(j, i, i) = D(j, i, i) + 1;
+
+	delete ptB;
 }

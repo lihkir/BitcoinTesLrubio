@@ -23,8 +23,8 @@ void diffusion_tensor(Matrix<double>& u, Block<double> &B)
 	int m = size(u, 1);
 	int n = size(u, 2);
 
-	Matrix<double> phik(m, 1);
 	Matrix<double> &delta = *pt_test->delta;
+	Matrix<double> *ptphik = new Matrix<double>(m, 1); Matrix<double> &phik = *ptphik;
 	
 	double phit, p2, quot, sigedd, siged, sige, wphit, wphitd, theta, psih;
 	
@@ -61,4 +61,8 @@ void diffusion_tensor(Matrix<double>& u, Block<double> &B)
 				B(k, i, i) = global::D0*pow(1 - phit, pt_test->nexp);
 		}
 	}
+	
+	delete ptphik;
+	delete pt_test->delta;
+	delete pt_test;
 }

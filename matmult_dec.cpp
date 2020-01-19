@@ -6,7 +6,7 @@ void matmult_dec(Matrix<double>& A, Matrix<double>& Qurmul, Matrix<double>& fh)
 	int N = Qurmul.rows();
 	int K = Qurmul.cols();
 
-    Matrix<double> Qurmulk(N, 1); 
+    Matrix<double> *ptQurmulk = new Matrix<double>(N, 1); Matrix<double> &Qurmulk = *ptQurmulk;
 
     if (N == 1)
         matmult(A, Qurmul, fh);
@@ -24,4 +24,5 @@ void matmult_dec(Matrix<double>& A, Matrix<double>& Qurmul, Matrix<double>& fh)
                 fh(i, k) = fh(i, k) + A(i, 2)*s;     
         }        
     }
+    delete ptQurmulk;
 }

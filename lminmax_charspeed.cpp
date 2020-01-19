@@ -154,6 +154,9 @@ void lminmax_charspeed(Matrix<double>& phil, Matrix<double>& phir, Matrix<double
   
   S(1) = min_n;
   S(2) = max_0;
+
+  delete pt_test->delta;
+	delete pt_test;
 }
 
 void find_extrema(Vector<double> &v, int l, double &vmin, double &vmax)

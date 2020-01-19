@@ -26,4 +26,7 @@ void jacobiana_dec(Matrix<double> &phi, Matrix<double> &Jdec)
   		Jdec(i, 4) = 1;
   		Jdec(i, 5) = -delta(i);
 	}
+
+	delete pt_test->delta;
+	delete pt_test;
 }

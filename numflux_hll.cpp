@@ -1,6 +1,7 @@
 #include <math.h>
 #include "fn_flux.h"
 #include "numflux_hll.h"
+#include "update_utilities.h"
 
 void numflux_hll(Matrix<double> &ul, Matrix<double> &ur, Matrix<double> &Sl, Matrix<double> &Sr, Matrix<double> &fh, Matrix<double> &fl, Matrix<double> &fr, Matrix<double> &S)
 {
@@ -14,10 +15,10 @@ void numflux_hll(Matrix<double> &ul, Matrix<double> &ur, Matrix<double> &Sl, Mat
 	fn_flux(ur,fr);
 
 	if (S(1) >= 0)
-		fh = fl;
+		update_inside(fh, fl, 0);
 	else if (S(2) <= 0)
-    	fh = fr;
-	else
+		update_inside(fh, fr, 0);
+ 	else
 	{
 		ids = 1/(S(2) - S(1));
   		gp = S(2)*ids;

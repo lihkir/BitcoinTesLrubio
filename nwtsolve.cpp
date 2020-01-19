@@ -16,24 +16,24 @@ void nwtsolve(double a, Matrix<double> &b, Matrix<double> &u, double h, double d
     int m = size(u, 1);
     int n = size(u, 2) - 2*pt_test->gc;
 
-    Matrix<double> v(m, n);
+    Matrix<double> *ptv = new Matrix<double>(m, n); Matrix<double> &v = *ptv;
     update_inside(v, u, pt_test->gc);
 
-    Block<double> D(n, m, m);
-    Block<double> L(n, m, m);
-    Block<double> U(n, m, m);
+    Block<double> *ptD = new Block<double>(n, m, m); Block<double> &D = *ptD;
+    Block<double> *ptL = new Block<double>(n, m, m); Block<double> &L = *ptL;
+    Block<double> *ptU = new Block<double>(n, m, m); Block<double> &U = *ptU;
 
-    Matrix<double> r(m, n);
-    Matrix<double> rh(m, n);
-    Matrix<double> du(m, n);
+    Matrix<double> *ptr = new Matrix<double>(m, n); Matrix<double> &r = *ptr;
+    Matrix<double> *ptrh = new Matrix<double>(m, n); Matrix<double> &rh = *ptrh;
+    Matrix<double> *ptdu = new Matrix<double>(m, n); Matrix<double> &du = *ptdu;
     
     diffusion_matrix(v, h, a, D, L, U);
     update_inside(r, b, 0);
     residual(D, L, U, v, r);
 
-    Matrix<double> bj(m, 1);
-    Matrix<double> rhj(m, 1);
-    Matrix<double> rj(m, 1);
+    Matrix<double> *ptbj = new Matrix<double>(m, 1); Matrix<double> &bj = *ptbj;
+    Matrix<double> *ptrhj = new Matrix<double>(m, 1); Matrix<double> &rhj = *ptrhj;
+    Matrix<double> *ptrj = new Matrix<double>(m, 1); Matrix<double> &rj = *ptrj;
 
     /** r=b-(L|D|U)*v **/    
     double nrm2_b = 0;
@@ -125,4 +125,15 @@ void nwtsolve(double a, Matrix<double> &b, Matrix<double> &u, double h, double d
 
     update_inside(u, v, pt_test->gc);
     bc(u);
+
+    delete ptbj;
+    delete ptD;
+    delete ptdu;
+    delete ptL;
+    delete ptr;
+    delete ptrh;
+    delete ptrhj;
+    delete ptrj;
+    delete ptU;
+    delete ptv;
 }

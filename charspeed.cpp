@@ -8,7 +8,7 @@ double charspeed(Matrix<double>& u)
 	struct test_cases* pt_test = get_tests();
 	int M = u.cols() - 2*pt_test->gc;
 
-	Matrix<double> S(2, M + 2*pt_test->gc);
+	Matrix<double> *ptS = new Matrix<double>(2, M + 2*pt_test->gc); Matrix<double> &S = *ptS;
 	minmax_charspeed(u, S);
 
 	double cs = 0; double csi;
@@ -17,5 +17,8 @@ double charspeed(Matrix<double>& u)
 		csi = max(abs(S(1, i)), abs(S(2, i)));
 		cs = max(cs, csi);
 	}
+
+	delete ptS;
+
 	return cs;
 }

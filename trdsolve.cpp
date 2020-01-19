@@ -6,9 +6,9 @@ void trdsolve(Block<double> &A1, Block<double> &B1, Block<double> &C1, Matrix<do
     int n = size(A1, 1);
     int m = size(A1, 2);
 
-    Block<double> A(n, m, m);
-    Block<double> B(n, m, m);
-    Block<double> C(n, m, m);
+    Block<double> *ptA = new Block<double>(n, m, m); Block<double> &A = *ptA;
+    Block<double> *ptB = new Block<double>(n, m, m); Block<double> &B = *ptB;
+    Block<double> *ptC = new Block<double>(n, m, m); Block<double> &C = *ptC;
     
     copy_block(A, A1);
     copy_block(B, B1);
@@ -16,11 +16,11 @@ void trdsolve(Block<double> &A1, Block<double> &B1, Block<double> &C1, Matrix<do
     
     lutrb(A, B, C);
 
-    Matrix<double> bf(m, 1);
-    Matrix<double> bl(m, 1);
-    Matrix<double> br(m, 1);
-    Matrix<double> bc(m, 1);
-    Matrix<double> be(m, 1);
+    Matrix<double> *ptbf = new Matrix<double>(m, 1); Matrix<double> &bf = *ptbf;
+    Matrix<double> *ptbl = new Matrix<double>(m, 1); Matrix<double> &bl = *ptbl;
+    Matrix<double> *ptbr = new Matrix<double>(m, 1); Matrix<double> &br = *ptbr;
+    Matrix<double> *ptbc = new Matrix<double>(m, 1); Matrix<double> &bc = *ptbc;
+    Matrix<double> *ptbe = new Matrix<double>(m, 1); Matrix<double> &be = *ptbe;
 
     get_col(bf, b, 1);
     fwdsolve(A[0], bf);
@@ -53,6 +53,14 @@ void trdsolve(Block<double> &A1, Block<double> &B1, Block<double> &C1, Matrix<do
         update_col(b, br, i + 1);
         update_col(b, bc, i);
     }
+    delete ptA;
+    delete ptB;
+    delete ptC;
+    delete ptbc;
+    delete ptbe;
+    delete ptbf;
+    delete ptbl;
+    delete ptbr;
 }
 
 void lutrb(Block<double> &A, Block<double> &B, Block<double> &C)
