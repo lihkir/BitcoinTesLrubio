@@ -21,6 +21,23 @@ namespace global
   extern int diff_idx;
 }
 
+Vector<double> parse_times(char * str_times)
+{
+  	char * p;
+  	int commas = 0;
+  	for (p = str_times; *p; p++) 
+	  if (*p == ',') commas++;
+  
+  	Vector<double> Ta(commas + 1);
+  
+  	Ta(1) = atof(strtok(str_times, ","));
+  	int count = 0;
+  	while ((p = strtok(NULL, ",")))
+    	Ta(++count + 1) = atof(p);
+	
+ 	return Ta;  
+}
+
 int main(int argc, char* argv[])
 {
 	printf("\nStarting pvm_sed\n\n");
@@ -33,9 +50,8 @@ int main(int argc, char* argv[])
   	global::int_form = atoi(argv[5]);
   	double cfl = atof(argv[6]);
   	int imex_type = atoi(argv[7]);
-  	double T = atof(argv[8]);
+	Vector<double> Ta = parse_times(argv[8]);
 	global::diff_idx = atoi(argv[9]);
-	const char *outname= argv[10];
 	
  	struct test_cases* pt_test = get_tests();	
 	
@@ -60,19 +76,8 @@ int main(int argc, char* argv[])
 	print2D(A, 8, "A");
 	print1D(b, 8, "b");
 
-	clock_t start, end;
-  	start = clock();
-	rkimex(A, b, Ah, bh, u0, T, cfl, pt_test->L, pt_test->convec_type, imex_type);
-	end = clock();
-  	double CPUTIME = double(end - start) / CLOCKS_PER_SEC;
-	
-  	printf("\nCPUTIME rkimex T=%.15f=> %.15f\n", T, CPUTIME);
-
-	ofstream fileout(outname);
-  	for (int i = 0; i < pt_test->M_rows; i++)
-    	for (int j = 0; j < N_cols; j++) 
-      		fileout << std::fixed << std::setprecision(16) << std::scientific << u0[i][j] << endl;
-  	fileout.close();
+	printf("\n##########################################\n\n");
+	rkimex(A, b, Ah, bh, u0, Ta, cfl, pt_test->L, pt_test->convec_type, imex_type);
 
   	delete pu0;
 	delete pt_test->delta;

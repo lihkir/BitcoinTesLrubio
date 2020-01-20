@@ -7,8 +7,9 @@
 #include "nwtsolve.h"
 #include "rkimex.h"
 #include "update_utilities.h"
+#include "save_solution.h"
 
-void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<double> &bh, Matrix<double> &u0, double T, double cfl, double L, int convec_type0, int imex_type)
+void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<double> &bh, Matrix<double> &u0, Vector<double> Ta, double cfl, double L, int convec_type0, int imex_type)
 {
   /** convec_type=0 => PVM | convec_type=1 => GLF**/ 
 
@@ -30,35 +31,49 @@ void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<dou
 
   double t = 0;
   int iter = 0;
-  double next_t;
-  
-  while (t  < T)
-  {
-    next_t = t + dt;
-    if (next_t > T)
-    {
-      dt = T - t;
-      next_t = T;
-    }
+  double next_t, T;
 
-    if (imex_type == 0) {
-      do_rkimex(A, b, Ah, bh, u, h, dt, 100, 1e-10);
-    } else {
-      do_lirkimex(A, b, Ah, u, h, dt);
-    } 
+  clock_t start, end;
+  start = clock();
+  for (int i = 1; i <= Ta.length(); i++)
+  {
+    T = Ta(i);  
+    while (t  < T)
+    {
+      next_t = t + dt;
+      if (next_t > T)
+      {
+        dt = T - t;
+        next_t = T;
+      }
+
+      if (imex_type == 0) {
+        do_rkimex(A, b, Ah, bh, u, h, dt, 100, 1e-10);
+      } else {
+        do_lirkimex(A, b, Ah, u, h, dt);
+      } 
     
-    t = next_t;
-    iter = iter + 1;
+      t = next_t;
+      iter = iter + 1;
         
-    if (imex_type == 0)
-      printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);
-    else
-      printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);        
+      if (imex_type == 0)
+        printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);
+      else
+        printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);        
        
-    cs = charspeed(u);
-    dt = cfl*h/cs;
+      cs = charspeed(u);
+      dt = cfl*h/cs;
+    }
+    end = clock();
+  	double CPUTIME = double(end - start) / CLOCKS_PER_SEC;
+    
+    printf("\n##########################################\n");
+  	printf("\nCPUTIME rkimex T=%.15f=> %.15f\n", T, CPUTIME);
+    printf("\n##########################################\n");
+    
+    update_inside(u0, u, pt_test->gc);
+    save_solution(u0, m, n, imex_type, convec_type, T);
   }
-  update_inside(u0, u, pt_test->gc);
 }
 
 void do_rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<double> &bh, Matrix<double> &u, double h, double dt, int maxits, double tol)
