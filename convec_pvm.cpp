@@ -60,7 +60,7 @@ void convec_pvm(Matrix<double>& v, double h, Matrix<double>& K)
 
 	bc(v);
 	minmax_charspeed(v, S);
-
+	
 	double cs=0;
 	double csi;
 	for (int i = pt_test->gc + 1; i <= M + pt_test->gc; i++)

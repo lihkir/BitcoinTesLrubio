@@ -12,19 +12,19 @@
 void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<double> &bh, Matrix<double> &u0, Vector<double> Ta, double cfl, double L, int convec_type0, int imex_type)
 {
   /** convec_type=0 => PVM | convec_type=1 => GLF**/ 
-
+  
   struct test_cases* pt_test = get_tests();
   
   int convec_type = convec_type0;
-
+  
   int m = size(u0, 1);
   int n = size(u0, 2);
-
+  
   Matrix<double> *ptu = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &u = *ptu;
   update_inside(u, u0, pt_test->gc);
   
   bc(u);
-
+  
   double h = L/n;
   double cs = charspeed(u);
   double dt = cfl*h/cs;
@@ -52,7 +52,7 @@ void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<dou
       } else {
         do_lirkimex(A, b, Ah, u, h, dt);
       } 
-    
+
       t = next_t;
       iter = iter + 1;
         
@@ -60,19 +60,20 @@ void rkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &Ah, Vector<dou
         printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);
       else
         printf("iter = %4d | t = %.16f | dt = %.16f | cs = %.16f\n", iter, t, dt, cs);        
-       
+
       cs = charspeed(u);
       dt = cfl*h/cs;
     }
+
     end = clock();
-  	double CPUTIME = double(end - start) / CLOCKS_PER_SEC;
+    double CPUTIME = double(end - start) / CLOCKS_PER_SEC;
     
     printf("\n##########################################\n");
-  	printf("\nCPUTIME rkimex T=%.15f=> %.15f\n", T, CPUTIME);
+    printf("\nCPUTIME rkimex T=%.15f=> %.15f\n", T, CPUTIME);
     printf("\n##########################################\n");
     
     update_inside(u0, u, pt_test->gc);
-    save_solution(u0, m, n, imex_type, convec_type, T);
+    save_solution(u0, m, n, imex_type, convec_type, T, global::idx_q);
   }
 }
 
@@ -165,7 +166,7 @@ void do_lirkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &At, Matri
 
   Matrix<double> *ptK0 = new Matrix<double>(m, n); Matrix<double> &K0 = *ptK0;
   Block<double> *ptK = new Block<double>(s, m, n); Block<double> &K = *ptK;
-
+  
   Matrix<double> *ptut = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &ut = *ptut;
   Matrix<double> *ptuh = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &uh = *ptuh;
   Matrix<double> *ptR = new Matrix<double>(m, n); Matrix<double> &R = *ptR;
@@ -209,9 +210,9 @@ void do_lirkimex(Matrix<double> &A, Vector<double> &b, Matrix<double> &At, Matri
     for (int p = 1; p <= m; p++)
       for (int j = 1; j <= s; j++)
         u(p, q + pt_test->gc) = u(p, q + pt_test->gc) + dt*b(j)*K(j, p, q);
-
+  
   bc(u);
-
+  
   delete ptK0;
   delete ptK;
   delete ptut;

@@ -44,8 +44,7 @@ void numflux_glf(Matrix<double>& v, Matrix<double>& fh)
 	{
 		get_col(vi, v, i);
   		fn_flux(vi, fi);
-		for (int j = 1; i <= m; i++)
-			f(j, i) = fi(j);
+		for (int j = 1; j <= m; j++) f(j, i) = fi(j);
 	}
 
 	Matrix<double> *ptfp = new Matrix<double>(m, n + 2*pt_test->gc); Matrix<double> &fp = *ptfp;

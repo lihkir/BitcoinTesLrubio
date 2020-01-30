@@ -20,6 +20,7 @@ void minmax_charspeed(Matrix<double> &ua, Matrix<double> &Sa)
 		lminmax_charspeed(ul, ur, uh);
 		for (int j = 1; j <= 2; j++) Sa(j, i) = uh(j);
 	}
+
 	delete ptSh;
 	delete ptuh;
 	delete ptul;

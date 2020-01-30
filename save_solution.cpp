@@ -1,7 +1,7 @@
 #include "save_solution.h"
 #include <fstream>
 
-void save_solution(Matrix<double> &u0, int N_rows, int N_cols, int imex_type, int convec_type, double T)
+void save_solution(Matrix<double> &u0, int N_rows, int N_cols, int imex_type, int convec_type, double T, int idx_q)
 {
     std::string init_name = "out";
     std::string strN_rows = std::to_string(N_rows);
@@ -9,8 +9,9 @@ void save_solution(Matrix<double> &u0, int N_rows, int N_cols, int imex_type, in
     std::string strImex_type = std::to_string(imex_type);
 	std::string strConvec_type = std::to_string(convec_type);
     std::string strTime = std::to_string((int)T);
+    std::string strIdx_q = std::to_string(idx_q);
 
-    std::string nameh = init_name + "_m" + strN_rows + "_n" +  strN_cols + "_imex" +  strImex_type + "_convec" +  strConvec_type + "_time" +  strTime; 
+    std::string nameh = init_name + "_m" + strN_rows + "_n" +  strN_cols + "_imex" +  strImex_type + "_convec" +  strConvec_type + "_time" +  strTime + "_idx_q" +  strIdx_q; 
     std::ofstream fileout(nameh);
   	for (int i = 1; i <= N_rows; i++)
     	for (int j = 1; j <= N_cols; j++) 

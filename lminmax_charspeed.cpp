@@ -155,6 +155,8 @@ void lminmax_charspeed(Matrix<double>& phil, Matrix<double>& phir, Matrix<double
   S(1) = min_n;
   S(2) = max_0;
 
+  // printf("\nlminmax_charspeed: S(1) = %.16f\t S(2) = %.16f\n", S(1), S(2));
+  
   delete pt_test->delta;
 	delete pt_test;
 }
